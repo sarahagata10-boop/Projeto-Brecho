@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#9b59b6">
     <meta name="description" content="Encontre brechós em Carapicuíba e região">
-    <title>🛍️ Brechós Carapicuíba</title>
+    <title>🛍️ Brechós na Região Oeste</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     
     <style>
-        /* [Seu CSS anterior está aqui, mantido inalterado] */
         * {
             margin: 0;
             padding: 0;
@@ -104,7 +103,7 @@
         }
         
         .map-section {
-            height: 500px;
+            height: 300px;
             position: relative;
             display: none;
         }
@@ -350,8 +349,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛍️ Brechós em Carapicuíba</h1>
-            <p>Encontre os melhores brechós da região</p>
+            <h1>🛍️ Brechós na Região Oeste (Carapicuíba, Osasco, Barueri e Cotia)</h1>
+            <p>Encontre os melhores brechós da sua região</p>
         </div>
         
         <div class="search-container">
@@ -360,12 +359,12 @@
                     type="text" 
                     id="searchInput" 
                     class="search-input" 
-                    placeholder="🔍 Busque por nome, bairro ou características (doações, troca, infantil...)"
+                    placeholder="🔍 Busque por nome, bairro, cidade (Osasco, Barueri) ou características"
                 />
                 <button class="search-btn" id="searchBtn">Buscar</button>
             </div>
             <div class="search-tips">
-                💡 Dica: Tente buscar por "doações", "troca", "Centro", "infantil", "masculino"
+                💡 Dica: Tente buscar por "Osasco", "Alphaville", "infantil" ou "grifes"
             </div>
         </div>
         
@@ -377,7 +376,7 @@
             <div class="empty-state" id="emptyState" style="display: none;"> 
                 <div class="empty-state-icon">🔍</div>
                 <h3>Faça uma busca para descobrir brechós incríveis!</h3>
-                <p>Digite o que procura e explore os melhores brechós de Carapicuíba</p>
+                <p>Digite o que procura e explore os melhores brechós da região</p>
             </div>
             
             <div id="resultsContent" style="display: none;">
@@ -393,8 +392,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     
     <script>
-        // Base de dados dos brechós
+        // Base de dados dos brechós (AGORA EXPANDIDA)
         const brechos = [
+            // === CARAPICUÍBA (EXISTENTES) ===
             {
                 id: 1,
                 nome: "Brechó Estilo & Consciência",
@@ -408,13 +408,8 @@
                 lng: -46.8356,
                 avaliacao: 4.8,
                 totalAvaliacoes: 127,
-                horarios: {
-                    "Seg-Sex": "09:00 - 18:00",
-                    "Sábado": "09:00 - 14:00",
-                    "Domingo": "Fechado"
-                },
-                precoMin: 10,
-                precoMax: 150,
+                horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 14:00", "Domingo": "Fechado" },
+                precoMin: 10, precoMax: 150,
                 aceitaDoacao: "Sim - Troca por pecas",
                 tiposPecas: "Usadas e novas",
                 caracteristicas: ["doações", "troca", "roupa feminina", "roupa masculina", "acessórios"],
@@ -433,13 +428,8 @@
                 lng: -46.8423,
                 avaliacao: 4.5,
                 totalAvaliacoes: 89,
-                horarios: {
-                    "Seg-Sex": "08:00 - 17:00",
-                    "Sábado": "08:00 - 12:00",
-                    "Domingo": "Fechado"
-                },
-                precoMin: 5,
-                precoMax: 80,
+                horarios: { "Seg-Sex": "08:00 - 17:00", "Sábado": "08:00 - 12:00", "Domingo": "Fechado" },
+                precoMin: 5, precoMax: 80,
                 aceitaDoacao: "Sim - Apenas recebe doações",
                 tiposPecas: "Apenas usadas",
                 caracteristicas: ["doações sem troca", "roupa infantil", "brinquedos", "preços baixos", "social"],
@@ -458,13 +448,8 @@
                 lng: -46.8289,
                 avaliacao: 4.9,
                 totalAvaliacoes: 156,
-                horarios: {
-                    "Seg-Sex": "10:00 - 19:00",
-                    "Sábado": "10:00 - 17:00",
-                    "Domingo": "10:00 - 14:00"
-                },
-                precoMin: 30,
-                precoMax: 300,
+                horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 17:00", "Domingo": "10:00 - 14:00" },
+                precoMin: 30, precoMax: 300,
                 aceitaDoacao: "Não",
                 tiposPecas: "Usadas e novas",
                 caracteristicas: ["vintage", "premium", "roupa feminina", "importados", "marcas famosas"],
@@ -483,13 +468,8 @@
                 lng: -46.8401,
                 avaliacao: 4.7,
                 totalAvaliacoes: 203,
-                horarios: {
-                    "Seg-Sex": "09:00 - 18:00",
-                    "Sábado": "09:00 - 15:00",
-                    "Domingo": "Fechado"
-                },
-                precoMin: 8,
-                precoMax: 120,
+                horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 15:00", "Domingo": "Fechado" },
+                precoMin: 8, precoMax: 120,
                 aceitaDoacao: "Sim - Troca por peças",
                 tiposPecas: "Usadas e novas",
                 caracteristicas: ["infantil", "bebê", "troca", "doações", "brinquedos", "roupa infantil"],
@@ -508,13 +488,8 @@
                 lng: -46.8378,
                 avaliacao: 4.6,
                 totalAvaliacoes: 94,
-                horarios: {
-                    "Seg-Sex": "10:00 - 19:00",
-                    "Sábado": "10:00 - 16:00",
-                    "Domingo": "Fechado"
-                },
-                precoMin: 15,
-                precoMax: 200,
+                horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 16:00", "Domingo": "Fechado" },
+                precoMin: 15, precoMax: 200,
                 aceitaDoacao: "Não",
                 tiposPecas: "Usadas e novas",
                 caracteristicas: ["masculino", "roupa masculina", "calçados", "acessórios masculinos", "ternos"],
@@ -533,37 +508,212 @@
                 lng: -46.8445,
                 avaliacao: 4.4,
                 totalAvaliacoes: 67,
-                horarios: {
-                    "Seg-Sex": "08:30 - 17:30",
-                    "Sábado": "09:00 - 13:00",
-                    "Domingo": "Fechado"
-                },
-                precoMin: 5,
-                precoMax: 60,
+                horarios: { "Seg-Sex": "08:30 - 17:30", "Sábado": "09:00 - 13:00", "Domingo": "Fechado" },
+                precoMin: 5, precoMax: 60,
                 aceitaDoacao: "Sim - Apenas recebe doações",
                 tiposPecas: "Apenas usadas",
                 caracteristicas: ["doações sem troca", "social", "beneficente", "preços baixos", "todos os tipos"],
                 descricao: "Brechó solidário vinculado a instituição beneficente. Preços acessíveis para todos."
+            },
+            // === OSASCO (NOVOS) ===
+            {
+                id: 7,
+                nome: "Achados de Osasco",
+                endereco: "Rua Tenente Avelar Pires de Azevedo, 500 - Centro",
+                cidade: "Osasco",
+                bairro: "Centro",
+                telefone: "(11) 3683-1010",
+                whatsapp: "5511936831010",
+                site: null,
+                lat: -23.5348,
+                lng: -46.7797,
+                avaliacao: 4.7,
+                totalAvaliacoes: 190,
+                horarios: { "Seg-Sex": "10:00 - 20:00", "Sábado": "10:00 - 18:00", "Domingo": "Fechado" },
+                precoMin: 20, precoMax: 250,
+                aceitaDoacao: "Sim - Consignação",
+                tiposPecas: "Usadas premium",
+                caracteristicas: ["feminino", "masculino", "acessórios", "grifes", "consignação"],
+                descricao: "Peças de grife e alta qualidade no coração de Osasco."
+            },
+            {
+                id: 8,
+                nome: "Brechó Sustentável da Vila Yara",
+                endereco: "Av. dos Autonomistas, 2500 - Vila Yara",
+                cidade: "Osasco",
+                bairro: "Vila Yara",
+                telefone: "(11) 3699-2020",
+                whatsapp: "5511936992020",
+                site: "https://www.sustentavel.com.br",
+                lat: -23.5411,
+                lng: -46.7621,
+                avaliacao: 4.6,
+                totalAvaliacoes: 150,
+                horarios: { "Seg-Sex": "09:30 - 19:30", "Sábado": "10:00 - 16:00", "Domingo": "Fechado" },
+                precoMin: 15, precoMax: 180,
+                aceitaDoacao: "Não",
+                tiposPecas: "Usadas",
+                caracteristicas: ["sustentável", "ecológico", "feminino", "acessórios", "troca"],
+                descricao: "Focado em moda sustentável e com opções de troca de peças."
+            },
+            // === BARUERI (NOVOS) ===
+            {
+                id: 9,
+                nome: "Outlet Vintage Alphaville",
+                endereco: "Alameda Rio Negro, 100 - Alphaville",
+                cidade: "Barueri",
+                bairro: "Alphaville",
+                telefone: "(11) 4191-3030",
+                whatsapp: "5511941913030",
+                site: "https://www.vintagealpha.com.br",
+                lat: -23.5097,
+                lng: -46.8530,
+                avaliacao: 4.9,
+                totalAvaliacoes: 350,
+                horarios: { "Seg-Sex": "11:00 - 21:00", "Sábado": "10:00 - 20:00", "Domingo": "12:00 - 18:00" },
+                precoMin: 50, precoMax: 500,
+                aceitaDoacao: "Não",
+                tiposPecas: "Novas e seminovas",
+                caracteristicas: ["luxo", "grifes", "premium", "acessórios de luxo", "eventos"],
+                descricao: "Brechó de luxo focado em peças de alta costura e grifes famosas."
+            },
+            {
+                id: 10,
+                nome: "Brechó da Praça Barueri",
+                endereco: "Rua Campos Sales, 200 - Centro",
+                cidade: "Barueri",
+                bairro: "Centro",
+                telefone: "(11) 4198-4040",
+                whatsapp: "5511941984040",
+                site: null,
+                lat: -23.5186,
+                lng: -46.8761,
+                avaliacao: 4.3,
+                totalAvaliacoes: 70,
+                horarios: { "Seg-Sex": "09:00 - 17:00", "Sábado": "09:00 - 13:00", "Domingo": "Fechado" },
+                precoMin: 5, precoMax: 100,
+                aceitaDoacao: "Sim - Apenas recebe doações",
+                tiposPecas: "Apenas usadas",
+                caracteristicas: ["preços baixos", "doações", "social", "feminino", "infantil"],
+                descricao: "Brechó popular com grande rotatividade de peças."
+            },
+            // === COTIA (NOVOS) ===
+            {
+                id: 11,
+                nome: "Recicla Moda Cotia",
+                endereco: "Av. Prof. Joaquim Barreto, 1500 - Granja Viana",
+                cidade: "Cotia",
+                bairro: "Granja Viana",
+                telefone: "(11) 4612-5050",
+                whatsapp: "5511946125050",
+                site: "https://www.reciclamoda.com.br",
+                lat: -23.5938,
+                lng: -46.9022,
+                avaliacao: 4.8,
+                totalAvaliacoes: 210,
+                horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 17:00", "Domingo": "Fechado" },
+                precoMin: 25, precoMax: 350,
+                aceitaDoacao: "Sim - Troca por créditos",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["feminino", "acessórios", "troca", "ecológico", "premium"],
+                descricao: "Brechó moderno na Granja Viana com foco em sustentabilidade e peças selecionadas."
+            },
+            {
+                id: 12,
+                nome: "Cantinho da Vovó Brechó",
+                endereco: "Rua Santo Antônio, 30 - Centro",
+                cidade: "Cotia",
+                bairro: "Centro",
+                telefone: "(11) 4614-6060",
+                whatsapp: "5511946146060",
+                site: null,
+                lat: -23.6068,
+                lng: -46.9194,
+                avaliacao: 4.4,
+                totalAvaliacoes: 45,
+                horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 14:00", "Domingo": "Fechado" },
+                precoMin: 10, precoMax: 80,
+                aceitaDoacao: "Não",
+                tiposPecas: "Usadas",
+                caracteristicas: ["infantil", "preços baixos", "bazar", "roupa de cama"],
+                descricao: "Pequeno bazar com foco em utilidades domésticas e vestuário infantil."
             }
         ];
 
         // Variáveis globais para o mapa
         let map = null;
         let markers = [];
+        let userMarker = null; // Marcador exclusivo para a localização do usuário
 
         /**
          * Inicializa o mapa Leaflet uma única vez.
          */
-        function initMap() {
+        function initializeLeafletMap() {
             if (!map) {
-                // Centraliza em Carapicuíba com zoom padrão
-                map = L.map('map').setView([-23.5225, -46.8356], 13);
+                // Inicializa o mapa com uma localização padrão (Região Oeste)
+                // Esta será a vista inicial caso a geolocalização falhe.
+                map = L.map('map').setView([-23.535, -46.840], 12);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap contributors',
                     maxZoom: 19
                 }).addTo(map);
+
+                // Tenta encontrar a localização do usuário imediatamente após a inicialização
+                findAndSetUserLocation();
             }
         }
+
+        /**
+         * Tenta encontrar a localização do usuário e centralizar o mapa.
+         */
+        function findAndSetUserLocation() {
+            if ("geolocation" in navigator) {
+                // Solicita a geolocalização
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        const userLatLng = [lat, lng];
+
+                        // Centraliza o mapa na localização do usuário
+                        map.setView(userLatLng, 14);
+
+                        // Cria um ícone customizado para o usuário (em azul)
+                        const userIcon = L.divIcon({
+                            className: 'user-marker',
+                            html: '<div style="background: #3498db; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px;">👤</div>',
+                            iconSize: [36, 36],
+                            iconAnchor: [18, 18]
+                        });
+
+                        // Remove o marcador anterior do usuário, se existir
+                        if (userMarker) {
+                            map.removeLayer(userMarker);
+                        }
+
+                        // Adiciona o novo marcador do usuário
+                        userMarker = L.marker(userLatLng, { icon: userIcon }).addTo(map)
+                            .bindPopup("<b>Sua Localização Atual</b>").openPopup();
+
+                        console.log("Localização do usuário encontrada e mapa centralizado.");
+                    },
+                    (error) => {
+                        console.warn(`Erro na geolocalização: ${error.message}`);
+                        // Em caso de erro, apenas mantém a vista padrão.
+                        alert("Não foi possível acessar sua localização. O mapa será exibido na região central.");
+                    },
+                    {
+                        enableHighAccuracy: true, // Tenta obter a melhor precisão possível
+                        timeout: 5000,           // Tempo limite de 5 segundos
+                        maximumAge: 0            // Não aceita cache
+                    }
+                );
+            } else {
+                console.log("Geolocalização não é suportada por este navegador.");
+                alert("Seu navegador não suporta geolocalização. O mapa será exibido na região central.");
+            }
+        }
+
 
         /**
          * Remove todos os marcadores existentes do mapa.
@@ -616,7 +766,7 @@
                         <span style="color: #666; margin-left: 5px;">${brecho.avaliacao} (${brecho.totalAvaliacoes} avaliações)</span>
                     </div>
                     <div style="margin-bottom: 8px;">
-                        <strong>📍</strong> ${brecho.endereco}
+                        <strong>📍</strong> ${brecho.endereco}, ${brecho.cidade}
                     </div>
                     <div style="margin-bottom: 8px;">
                         <strong>💰</strong> R$${brecho.precoMin} - R$${brecho.precoMax}
@@ -660,7 +810,7 @@
                     <div class="card-info">
                         <div class="info-item">
                             <span class="info-icon">📍</span>
-                            <span class="info-text">${brecho.endereco}<br>${brecho.cidade} - ${brecho.bairro}</span>
+                            <span class="info-text">${brecho.endereco}<br><strong>${brecho.cidade}</strong> - ${brecho.bairro}</span>
                         </div>
                         
                         <div class="info-item">
@@ -736,8 +886,8 @@
             return brechos.filter(brecho => {
                 return (
                     brecho.nome.toLowerCase().includes(searchTerm) ||
+                    brecho.cidade.toLowerCase().includes(searchTerm) || 
                     brecho.bairro.toLowerCase().includes(searchTerm) ||
-                    brecho.cidade.toLowerCase().includes(searchTerm) ||
                     brecho.caracteristicas.some(c => c.toLowerCase().includes(searchTerm)) ||
                     brecho.descricao.toLowerCase().includes(searchTerm)
                 );
@@ -746,7 +896,6 @@
 
         /**
          * Renderiza os resultados no mapa e na lista de cards.
-         * Esta é a função crítica para a UI.
          */
         function displayResults(results) {
             const mapSection = document.getElementById('mapSection');
@@ -755,17 +904,13 @@
             const resultsCount = document.getElementById('resultsCount');
             const cardsGrid = document.getElementById('cardsGrid');
 
-            // 1. GARANTE A INICIALIZAÇÃO DO MAPA E O MOSTRA
-            initMap();
+            // 1. GARANTE A VISIBILIDADE DO MAPA E FORÇA O RECALCULO DE TAMANHO
             mapSection.classList.add('show'); 
-
-            // 2. CORREÇÃO CRÍTICA PARA O LEAFLET: Força o recalculo
-            // Isso resolve problemas de renderização do mapa (partes cinzas)
             setTimeout(() => {
-                map.invalidateSize();
-            }, 50); // Atraso leve para garantir que o CSS 'show' foi aplicado.
+                if (map) map.invalidateSize(); // Invalida o tamanho apenas se o mapa existir
+            }, 50); 
 
-            // 3. LIMPA MARCADORES ANTERIORES
+            // 2. LIMPA MARCADORES ANTERIORES DOS BRECHÓS
             clearMarkers();
             
             if (results.length === 0) {
@@ -775,30 +920,37 @@
                 emptyState.innerHTML = `
                     <div class="no-results">
                         <h3>😔 Nenhum brechó encontrado</h3>
-                        <p>Tente buscar por outros termos como "doações", "troca", "Centro" ou "infantil"</p>
+                        <p>Tente buscar por outros termos como "Osasco", "Barueri" ou "infantil"</p>
                     </div>
                 `;
-                // Centraliza o mapa se não houver resultados
-                map.setView([-23.5225, -46.8356], 13); 
+                // Não altera a vista do mapa, mantendo o foco no usuário (se encontrado) ou na área padrão.
                 return;
             }
             
-            // 4. ADICIONA MARCADORES E AJUSTA O ZOOM
+            // 3. ADICIONA MARCADORES DOS BRECHÓS E AJUSTA O ZOOM
             results.forEach(brecho => {
                 addMarker(brecho);
             });
 
-            if (results.length > 0) { 
-                const group = L.featureGroup(markers);
-                // Ajusta o zoom para ver todos os marcadores com um pequeno padding
-                map.fitBounds(group.getBounds().pad(0.1));
+            if (results.length > 0 && map) { 
+                // Cria um grupo de marcadores (incluindo o do usuário, se existir) para ajustar o zoom
+                let allMarkers = [...markers];
+                if (userMarker) {
+                    allMarkers.push(userMarker);
+                }
+
+                if (allMarkers.length > 0) {
+                    const group = L.featureGroup(allMarkers);
+                    // Ajusta o zoom para ver todos os marcadores encontrados
+                    map.fitBounds(group.getBounds().pad(0.1));
+                }
             } 
 
-            // 5. RENDERIZA OS CARDS
+            // 4. RENDERIZA OS CARDS
             resultsCount.textContent = `${results.length} ${results.length === 1 ? 'brechó encontrado' : 'brechós encontrados'}`;
             cardsGrid.innerHTML = results.map(brecho => createCard(brecho)).join('');
 
-            // 6. MOSTRA OS CONTEÚDOS E ESCONDE O EMPTY STATE
+            // 5. MOSTRA OS CONTEÚDOS E ESCONDE O EMPTY STATE
             emptyState.style.display = 'none';
             resultsContent.style.display = 'block';
 
@@ -824,10 +976,13 @@
         });
 
         // *******************************************************************
-        // * CORREÇÃO ADICIONAL: Inicia a interface automaticamente ao carregar
+        // * Inicia a interface automaticamente ao carregar
         // *******************************************************************
         document.addEventListener('DOMContentLoaded', () => {
-            // Exibe todos os brechós na carga inicial, eliminando o estado vazio.
+            // 1. Inicializa o Leaflet Map E tenta encontrar a localização do usuário
+            initializeLeafletMap();
+            
+            // 2. Exibe todos os brechós na carga inicial, eliminando o estado vazio.
             displayResults(brechos);
         });
     </script>
