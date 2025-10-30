@@ -21,182 +21,6 @@
             background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
             min-height: 100vh;
         }
-
-        /* ============ ESTILOS TELA DE LOGIN ============ */
-        #loginScreen {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .login-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 450px;
-            width: 100%;
-            overflow: hidden;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-header {
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-
-        .login-header h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            font-size: 1.1rem;
-            opacity: 0.95;
-        }
-
-        .login-body {
-            padding: 40px 30px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 0.95rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #fafbfc;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #9b59b6;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.1);
-        }
-
-        .btn-primary {
-            width: 100%;
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(155, 89, 182, 0.6);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            width: 100%;
-            background: transparent;
-            color: #9b59b6;
-            border: 2px solid #9b59b6;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-
-        .btn-secondary:hover {
-            background: #f3e5f5;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 25px 0;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: #e1e5e9;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 15px;
-            position: relative;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            display: none;
-        }
-
-        .message.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .error-message {
-            background: #fee;
-            color: #c33;
-            border-left: 4px solid #c33;
-        }
-
-        .success-message {
-            background: #efe;
-            color: #3c3;
-            border-left: 4px solid #3c3;
-        }
-
-        /* ============ ESTILOS APP PRINCIPAL ============ */
-        #mainApp {
-            display: none;
-        }
         
         .container {
             max-width: 1400px;
@@ -210,7 +34,6 @@
             padding: 30px 20px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
-            position: relative;
         }
         
         .header h1 {
@@ -222,38 +45,6 @@
         .header p {
             font-size: 1.1rem;
             opacity: 0.95;
-        }
-
-        .user-info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .logout-btn:hover {
-            background: white;
-            color: #9b59b6;
         }
         
         .search-container {
@@ -531,19 +322,8 @@
         }
         
         @media (max-width: 768px) {
-            .login-container {
-                margin: 20px;
-            }
-
             .header h1 {
                 font-size: 1.8rem;
-            }
-
-            .user-info, .logout-btn {
-                position: static;
-                display: block;
-                margin: 10px auto;
-                text-align: center;
             }
             
             .cards-grid {
@@ -567,97 +347,44 @@
     </style>
 </head>
 <body>
-    <!-- ============ TELA DE LOGIN ============ -->
-    <div id="loginScreen">
-        <div class="login-container">
-            <div class="login-header">
-                <h1>🛍️</h1>
-                <p>Moda da Z/O</p>
+    <div class="container">
+        <div class="header">
+            <h1>🛍️ Moda da Z/O </h1>
+            <p>Encontre os melhores brechós da sua região</p>
+        </div>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="🔍 Busque por nome, bairro, cidade (Osasco, Barueri) ou características"
+                />
+                <button class="search-btn" id="searchBtn">Buscar</button>
             </div>
-            <div class="login-body">
-                <div id="errorMessage" class="message error-message"></div>
-                <div id="successMessage" class="message success-message"></div>
-
-                <!-- FORMULÁRIO DE LOGIN -->
-                <div id="loginForm">
-                    <div class="form-group">
-                        <label for="loginEmail">📧 E-mail:</label>
-                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">🔒 Senha:</label>
-                        <input type="password" id="loginPassword" placeholder="Sua senha" required>
-                    </div>
-                    <button class="btn-primary" id="loginBtn">Entrar</button>
-                    <div class="divider"><span>ou</span></div>
-                    <button class="btn-secondary" id="showRegisterBtn">Criar Nova Conta</button>
-                </div>
-
-                <!-- FORMULÁRIO DE CADASTRO -->
-                <div id="registerForm" style="display: none;">
-                    <div class="form-group">
-                        <label for="registerEmail">📧 E-mail:</label>
-                        <input type="email" id="registerEmail" placeholder="seu@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="registerPassword">🔒 Senha:</label>
-                        <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="registerPasswordConfirm">🔒 Confirmar Senha:</label>
-                        <input type="password" id="registerPasswordConfirm" placeholder="Digite a senha novamente" required>
-                    </div>
-                    <button class="btn-primary" id="registerBtn">Criar Conta</button>
-                    <div class="divider"><span>ou</span></div>
-                    <button class="btn-secondary" id="showLoginBtn">Já tenho conta</button>
-                </div>
+            <div class="search-tips">
+                💡 Dica: Tente buscar por "Osasco", "Alphaville", "infantil" ou "grifes"
             </div>
         </div>
-    </div>
-
-    <!-- ============ APP PRINCIPAL ============ -->
-    <div id="mainApp">
-        <div class="container">
-            <div class="header">
-                <div class="user-info">👤 <span id="userEmail"></span></div>
-                <h1>🛍️ Moda da Z/O</h1>
-                <p>Encontre os melhores brechós da sua região</p>
-                <button class="logout-btn" id="logoutBtn">Sair</button>
+        
+        <div class="map-section" id="mapSection">
+            <div id="map"></div>
+        </div>
+        
+        <div class="results-container" id="resultsContainer">
+            <div class="empty-state" id="emptyState" style="display: none;"> 
+                <div class="empty-state-icon">🔍</div>
+                <h3>Faça uma busca para descobrir brechós incríveis!</h3>
+                <p>Digite o que procura e explore os melhores brechós da região</p>
             </div>
             
-            <div class="search-container">
-                <div class="search-box">
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        class="search-input" 
-                        placeholder="🔍 Busque por nome, bairro, cidade (Osasco, Barueri) ou características"
-                    />
-                    <button class="search-btn" id="searchBtn">Buscar</button>
+            <div id="resultsContent" style="display: none;">
+                <div class="results-header">
+                    <h2>📍 Brechós Encontrados</h2>
+                    <p class="results-count" id="resultsCount"></p>
                 </div>
-                <div class="search-tips">
-                    💡 Dica: Tente buscar por "Osasco", "Alphaville", "infantil" ou "grifes"
-                </div>
-            </div>
-            
-            <div class="map-section" id="mapSection">
-                <div id="map"></div>
-            </div>
-            
-            <div class="results-container" id="resultsContainer">
-                <div class="empty-state" id="emptyState" style="display: none;"> 
-                    <div class="empty-state-icon">🔍</div>
-                    <h3>Faça uma busca para descobrir brechós incríveis!</h3>
-                    <p>Digite o que procura e explore os melhores brechós da região</p>
-                </div>
-                
-                <div id="resultsContent" style="display: none;">
-                    <div class="results-header">
-                        <h2>📍 Brechós Encontrados</h2>
-                        <p class="results-count" id="resultsCount"></p>
-                    </div>
-                    <div class="cards-grid" id="cardsGrid"></div>
-                </div>
+                <div class="cards-grid" id="cardsGrid"></div>
             </div>
         </div>
     </div>
@@ -665,159 +392,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     
     <script>
-        // ============ SISTEMA DE AUTENTICAÇÃO SIMPLES ============
-        // Armazena usuários em memória (use um backend real em produção)
-        let users = {};
-        let currentUser = null;
-
-        // Elementos do DOM - Login
-        const loginScreen = document.getElementById('loginScreen');
-        const mainApp = document.getElementById('mainApp');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
-
-        // Funções de mensagem
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.classList.add('show');
-            successMessage.classList.remove('show');
-            setTimeout(() => errorMessage.classList.remove('show'), 5000);
-        }
-
-        function showSuccess(message) {
-            successMessage.textContent = message;
-            successMessage.classList.add('show');
-            errorMessage.classList.remove('show');
-            setTimeout(() => successMessage.classList.remove('show'), 3000);
-        }
-
-        // Alternar entre login e cadastro
-        document.getElementById('showRegisterBtn').addEventListener('click', () => {
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            errorMessage.classList.remove('show');
-            successMessage.classList.remove('show');
-        });
-
-        document.getElementById('showLoginBtn').addEventListener('click', () => {
-            registerForm.style.display = 'none';
-            loginForm.style.display = 'block';
-            errorMessage.classList.remove('show');
-            successMessage.classList.remove('show');
-        });
-
-        // CADASTRO
-        document.getElementById('registerBtn').addEventListener('click', () => {
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerPasswordConfirm').value;
-
-            if (!email || !password || !confirmPassword) {
-                showError('❌ Preencha todos os campos!');
-                return;
-            }
-
-            if (!email.includes('@')) {
-                showError('❌ E-mail inválido!');
-                return;
-            }
-
-            if (password.length < 6) {
-                showError('❌ A senha deve ter no mínimo 6 caracteres!');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                showError('❌ As senhas não coincidem!');
-                return;
-            }
-
-            if (users[email]) {
-                showError('❌ Este e-mail já está cadastrado!');
-                return;
-            }
-
-            // Criar conta
-            users[email] = { email, password };
-            showSuccess('✅ Conta criada com sucesso! Entrando...');
-
-            setTimeout(() => {
-                currentUser = users[email];
-                showMainApp();
-            }, 1500);
-        });
-
-        // LOGIN
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                showError('❌ Preencha e-mail e senha!');
-                return;
-            }
-
-            if (!users[email]) {
-                showError('❌ Usuário não encontrado!');
-                return;
-            }
-
-            if (users[email].password !== password) {
-                showError('❌ Senha incorreta!');
-                return;
-            }
-
-            // Login bem-sucedido
-            currentUser = users[email];
-            showSuccess('✅ Login realizado! Redirecionando...');
-            
-            setTimeout(() => {
-                showMainApp();
-            }, 1500);
-        });
-
-        // Login com Enter
-        document.getElementById('loginEmail').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') document.getElementById('loginPassword').focus();
-        });
-        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') document.getElementById('loginBtn').click();
-        });
-        document.getElementById('registerPasswordConfirm').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') document.getElementById('registerBtn').click();
-        });
-
-        // LOGOUT
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Deseja realmente sair?')) {
-                currentUser = null;
-                loginScreen.style.display = 'flex';
-                mainApp.style.display = 'none';
-                document.getElementById('loginEmail').value = '';
-                document.getElementById('loginPassword').value = '';
-                document.getElementById('registerEmail').value = '';
-                document.getElementById('registerPassword').value = '';
-                document.getElementById('registerPasswordConfirm').value = '';
-            }
-        });
-
-        // Mostrar app principal
-        function showMainApp() {
-            loginScreen.style.display = 'none';
-            mainApp.style.display = 'block';
-            document.getElementById('userEmail').textContent = currentUser.email;
-            
-            // Inicializar mapa e resultados
-            setTimeout(() => {
-                initializeLeafletMap();
-                displayResults(brechos);
-            }, 100);
-        }
-
-        // ============ BASE DE DADOS DOS BRECHÓS ============
+        // Base de dados dos brechós (AGORA EXPANDIDA)
         const brechos = [
+            // === CARAPICUÍBA (EXISTENTES) ===
             {
                 id: 1,
                 nome: "Brechó Estilo & Consciência",
@@ -883,4 +460,531 @@
                 nome: "Brechó Infantil Mundo Mágico",
                 endereco: "Rua Santa Terezinha, 321 - Jardim Novo Horizonte",
                 cidade: "Carapicuíba",
-                bairro: "Jardim
+                bairro: "Jardim Novo Horizonte",
+                telefone: "(11) 4187-2345",
+                whatsapp: "5511941872345",
+                site: null,
+                lat: -23.5278,
+                lng: -46.8401,
+                avaliacao: 4.7,
+                totalAvaliacoes: 203,
+                horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 15:00", "Domingo": "Fechado" },
+                precoMin: 8, precoMax: 120,
+                aceitaDoacao: "Sim - Troca por peças",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["infantil", "bebê", "troca", "doações", "brinquedos", "roupa infantil"],
+                descricao: "Especializado em roupas infantis e bebês. Sistema de troca disponível."
+            },
+            {
+                id: 5,
+                nome: "Masculino & Cia Brechó",
+                endereco: "Rua João Pessoa, 567 - Vila Dirce",
+                cidade: "Carapicuíba",
+                bairro: "Vila Dirce",
+                telefone: "(11) 4188-6789",
+                whatsapp: "5511941886789",
+                site: "https://www.masculinoecia.com.br",
+                lat: -23.5156,
+                lng: -46.8378,
+                avaliacao: 4.6,
+                totalAvaliacoes: 94,
+                horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 16:00", "Domingo": "Fechado" },
+                precoMin: 15, precoMax: 200,
+                aceitaDoacao: "Não",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["masculino", "roupa masculina", "calçados", "acessórios masculinos", "ternos"],
+                descricao: "Focado no público masculino com peças sociais e casuais de qualidade."
+            },
+            {
+                id: 6,
+                nome: "Brechó Solidário Esperança",
+                endereco: "Av. Deputado Emílio Carlos, 890 - Parque Santa Teresa",
+                cidade: "Carapicuíba",
+                bairro: "Parque Santa Teresa",
+                telefone: "(11) 4189-4567",
+                whatsapp: "5511941894567",
+                site: null,
+                lat: -23.5334,
+                lng: -46.8445,
+                avaliacao: 4.4,
+                totalAvaliacoes: 67,
+                horarios: { "Seg-Sex": "08:30 - 17:30", "Sábado": "09:00 - 13:00", "Domingo": "Fechado" },
+                precoMin: 5, precoMax: 60,
+                aceitaDoacao: "Sim - Apenas recebe doações",
+                tiposPecas: "Apenas usadas",
+                caracteristicas: ["doações sem troca", "social", "beneficente", "preços baixos", "todos os tipos"],
+                descricao: "Brechó solidário vinculado a instituição beneficente. Preços acessíveis para todos."
+            },
+            // === OSASCO (NOVOS) ===
+            {
+                id: 7,
+                nome: "Achados de Osasco",
+                endereco: "Rua Tenente Avelar Pires de Azevedo, 500 - Centro",
+                cidade: "Osasco",
+                bairro: "Centro",
+                telefone: "(11) 3683-1010",
+                whatsapp: "5511936831010",
+                site: null,
+                lat: -23.5348,
+                lng: -46.7797,
+                avaliacao: 4.7,
+                totalAvaliacoes: 190,
+                horarios: { "Seg-Sex": "10:00 - 20:00", "Sábado": "10:00 - 18:00", "Domingo": "Fechado" },
+                precoMin: 20, precoMax: 250,
+                aceitaDoacao: "Sim - Consignação",
+                tiposPecas: "Usadas premium",
+                caracteristicas: ["feminino", "masculino", "acessórios", "grifes", "consignação"],
+                descricao: "Peças de grife e alta qualidade no coração de Osasco."
+            },
+            {
+                id: 8,
+                nome: "Brechó Sustentável da Vila Yara",
+                endereco: "Av. dos Autonomistas, 2500 - Vila Yara",
+                cidade: "Osasco",
+                bairro: "Vila Yara",
+                telefone: "(11) 3699-2020",
+                whatsapp: "5511936992020",
+                site: "https://www.sustentavel.com.br",
+                lat: -23.5411,
+                lng: -46.7621,
+                avaliacao: 4.6,
+                totalAvaliacoes: 150,
+                horarios: { "Seg-Sex": "09:30 - 19:30", "Sábado": "10:00 - 16:00", "Domingo": "Fechado" },
+                precoMin: 15, precoMax: 180,
+                aceitaDoacao: "Não",
+                tiposPecas: "Usadas",
+                caracteristicas: ["sustentável", "ecológico", "feminino", "acessórios", "troca"],
+                descricao: "Focado em moda sustentável e com opções de troca de peças."
+            },
+            // === BARUERI (NOVOS) ===
+            {
+                id: 9,
+                nome: "Outlet Vintage Alphaville",
+                endereco: "Alameda Rio Negro, 100 - Alphaville",
+                cidade: "Barueri",
+                bairro: "Alphaville",
+                telefone: "(11) 4191-3030",
+                whatsapp: "5511941913030",
+                site: "https://www.vintagealpha.com.br",
+                lat: -23.5097,
+                lng: -46.8530,
+                avaliacao: 4.9,
+                totalAvaliacoes: 350,
+                horarios: { "Seg-Sex": "11:00 - 21:00", "Sábado": "10:00 - 20:00", "Domingo": "12:00 - 18:00" },
+                precoMin: 50, precoMax: 500,
+                aceitaDoacao: "Não",
+                tiposPecas: "Novas e seminovas",
+                caracteristicas: ["luxo", "grifes", "premium", "acessórios de luxo", "eventos"],
+                descricao: "Brechó de luxo focado em peças de alta costura e grifes famosas."
+            },
+            {
+                id: 10,
+                nome: "Brechó da Praça Barueri",
+                endereco: "Rua Campos Sales, 200 - Centro",
+                cidade: "Barueri",
+                bairro: "Centro",
+                telefone: "(11) 4198-4040",
+                whatsapp: "5511941984040",
+                site: null,
+                lat: -23.5186,
+                lng: -46.8761,
+                avaliacao: 4.3,
+                totalAvaliacoes: 70,
+                horarios: { "Seg-Sex": "09:00 - 17:00", "Sábado": "09:00 - 13:00", "Domingo": "Fechado" },
+                precoMin: 5, precoMax: 100,
+                aceitaDoacao: "Sim - Apenas recebe doações",
+                tiposPecas: "Apenas usadas",
+                caracteristicas: ["preços baixos", "doações", "social", "feminino", "infantil"],
+                descricao: "Brechó popular com grande rotatividade de peças."
+            },
+            // === COTIA (NOVOS) ===
+            {
+                id: 11,
+                nome: "Recicla Moda Cotia",
+                endereco: "Av. Prof. Joaquim Barreto, 1500 - Granja Viana",
+                cidade: "Cotia",
+                bairro: "Granja Viana",
+                telefone: "(11) 4612-5050",
+                whatsapp: "5511946125050",
+                site: "https://www.reciclamoda.com.br",
+                lat: -23.5938,
+                lng: -46.9022,
+                avaliacao: 4.8,
+                totalAvaliacoes: 210,
+                horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 17:00", "Domingo": "Fechado" },
+                precoMin: 25, precoMax: 350,
+                aceitaDoacao: "Sim - Troca por créditos",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["feminino", "acessórios", "troca", "ecológico", "premium"],
+                descricao: "Brechó moderno na Granja Viana com foco em sustentabilidade e peças selecionadas."
+            },
+            {
+                id: 12,
+                nome: "Cantinho da Vovó Brechó",
+                endereco: "Rua Santo Antônio, 30 - Centro",
+                cidade: "Cotia",
+                bairro: "Centro",
+                telefone: "(11) 4614-6060",
+                whatsapp: "5511946146060",
+                site: null,
+                lat: -23.6068,
+                lng: -46.9194,
+                avaliacao: 4.4,
+                totalAvaliacoes: 45,
+                horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 14:00", "Domingo": "Fechado" },
+                precoMin: 10, precoMax: 80,
+                aceitaDoacao: "Não",
+                tiposPecas: "Usadas",
+                caracteristicas: ["infantil", "preços baixos", "bazar", "roupa de cama"],
+                descricao: "Pequeno bazar com foco em utilidades domésticas e vestuário infantil."
+            }
+        ];
+
+        // Variáveis globais para o mapa
+        let map = null;
+        let markers = [];
+        let userMarker = null; // Marcador exclusivo para a localização do usuário
+
+        /**
+         * Inicializa o mapa Leaflet uma única vez.
+         */
+        function initializeLeafletMap() {
+            if (!map) {
+                // Inicializa o mapa com uma localização padrão (Região Oeste)
+                // Esta será a vista inicial caso a geolocalização falhe.
+                map = L.map('map').setView([-23.535, -46.840], 12);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+                // Tenta encontrar a localização do usuário imediatamente após a inicialização
+                findAndSetUserLocation();
+            }
+        }
+
+        /**
+         * Tenta encontrar a localização do usuário e centralizar o mapa.
+         */
+        function findAndSetUserLocation() {
+            if ("geolocation" in navigator) {
+                // Solicita a geolocalização
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        const userLatLng = [lat, lng];
+
+                        // Centraliza o mapa na localização do usuário
+                        map.setView(userLatLng, 14);
+
+                        // Cria um ícone customizado para o usuário (em azul)
+                        const userIcon = L.divIcon({
+                            className: 'user-marker',
+                            html: '<div style="background: #3498db; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px;">👤</div>',
+                            iconSize: [36, 36],
+                            iconAnchor: [18, 18]
+                        });
+
+                        // Remove o marcador anterior do usuário, se existir
+                        if (userMarker) {
+                            map.removeLayer(userMarker);
+                        }
+
+                        // Adiciona o novo marcador do usuário
+                        userMarker = L.marker(userLatLng, { icon: userIcon }).addTo(map)
+                            .bindPopup("<b>Sua Localização Atual</b>").openPopup();
+
+                        console.log("Localização do usuário encontrada e mapa centralizado.");
+                    },
+                    (error) => {
+                        console.warn(`Erro na geolocalização: ${error.message}`);
+                        // Em caso de erro, apenas mantém a vista padrão.
+                        alert("Não foi possível acessar sua localização. O mapa será exibido na região central.");
+                    },
+                    {
+                        enableHighAccuracy: true, // Tenta obter a melhor precisão possível
+                        timeout: 5000,           // Tempo limite de 5 segundos
+                        maximumAge: 0            // Não aceita cache
+                    }
+                );
+            } else {
+                console.log("Geolocalização não é suportada por este navegador.");
+                alert("Seu navegador não suporta geolocalização. O mapa será exibido na região central.");
+            }
+        }
+
+
+        /**
+         * Remove todos os marcadores existentes do mapa.
+         */
+        function clearMarkers() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+        }
+
+        /**
+         * Cria um ícone de marcador customizado (o saco de compras roxo).
+         */
+        function createCustomIcon() {
+            return L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px;">🛍️</div>',
+                iconSize: [36, 36],
+                iconAnchor: [18, 18]
+            });
+        }
+
+        /**
+         * Adiciona um marcador para um brechó específico.
+         */
+        function addMarker(brecho) {
+            const marker = L.marker([brecho.lat, brecho.lng], {
+                icon: createCustomIcon()
+            }).addTo(map);
+
+            const popupContent = createPopupContent(brecho);
+            marker.bindPopup(popupContent, {
+                className: 'custom-popup',
+                maxWidth: 350
+            });
+
+            markers.push(marker);
+            return marker;
+        }
+
+        /**
+         * Cria o conteúdo HTML do popup.
+         */
+        function createPopupContent(brecho) {
+            const stars = '⭐'.repeat(Math.floor(brecho.avaliacao));
+            return `
+                <div style="padding: 10px;">
+                    <div class="popup-title">${brecho.nome}</div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="color: #ffc107; font-size: 1.1rem;">${stars}</span>
+                        <span style="color: #666; margin-left: 5px;">${brecho.avaliacao} (${brecho.totalAvaliacoes} avaliações)</span>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>📍</strong> ${brecho.endereco}, ${brecho.cidade}
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>💰</strong> R$${brecho.precoMin} - R$${brecho.precoMax}
+                    </div>
+                    ${brecho.whatsapp ? `
+                        <a href="https://wa.me/${brecho.whatsapp}" target="_blank" style="display: inline-block; background: #25d366; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; margin-top: 10px;">
+                            💬 WhatsApp
+                        </a>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        /**
+         * Cria o card HTML para um brechó.
+         */
+        function createCard(brecho) {
+            const stars = '⭐'.repeat(Math.floor(brecho.avaliacao));
+            const horariosHtml = Object.entries(brecho.horarios)
+                .map(([dia, horario]) => `
+                    <div class="schedule-item">
+                        <span class="schedule-day">${dia}:</span>
+                        <span>${horario}</span>
+                    </div>
+                `).join('');
+
+            const tagsHtml = brecho.caracteristicas
+                .map(tag => `<span class="tag">${tag}</span>`)
+                .join('');
+
+            return `
+                <div class="brecho-card">
+                    <div class="card-header">
+                        <h3 class="card-title">${brecho.nome}</h3>
+                        <div class="card-rating">
+                            <span class="stars">${stars}</span>
+                            <span class="rating-text">${brecho.avaliacao}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-info">
+                        <div class="info-item">
+                            <span class="info-icon">📍</span>
+                            <span class="info-text">${brecho.endereco}<br><strong>${brecho.cidade}</strong> - ${brecho.bairro}</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-icon">📞</span>
+                            <span class="info-text">${brecho.telefone}</span>
+                        </div>
+                        
+                        ${brecho.whatsapp ? `
+                            <div class="info-item">
+                                <span class="info-icon">💬</span>
+                                <span class="info-text">
+                                    <a href="https://wa.me/${brecho.whatsapp}" target="_blank" class="info-link">
+                                        Enviar WhatsApp
+                                    </a>
+                                </span>
+                            </div>
+                        ` : ''}
+                        
+                        ${brecho.site ? `
+                            <div class="info-item">
+                                <span class="info-icon">🌐</span>
+                                <span class="info-text">
+                                    <a href="${brecho.site}" target="_blank" class="info-link">
+                                        Visitar site
+                                    </a>
+                                </span>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="info-item">
+                            <span class="info-icon">💬</span>
+                            <span class="info-text">${brecho.totalAvaliacoes} avaliações</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-icon">👕</span>
+                            <span class="info-text">${brecho.tiposPecas}</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-icon">🎁</span>
+                            <span class="info-text"><strong>Doações:</strong> ${brecho.aceitaDoacao}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule">
+                        <strong>🕐 Horários de Funcionamento:</strong>
+                        ${horariosHtml}
+                    </div>
+                    
+                    <div class="price-range">
+                        💰 R$${brecho.precoMin} - R$${brecho.precoMax}
+                    </div>
+                    
+                    <div class="card-tags">
+                        ${tagsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Filtra os brechós com base na busca do usuário.
+         */
+        function searchBrechos(query) {
+            const searchTerm = query.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                // Retorna todos se a busca estiver vazia
+                return brechos;
+            }
+            
+            return brechos.filter(brecho => {
+                return (
+                    brecho.nome.toLowerCase().includes(searchTerm) ||
+                    brecho.cidade.toLowerCase().includes(searchTerm) || 
+                    brecho.bairro.toLowerCase().includes(searchTerm) ||
+                    brecho.caracteristicas.some(c => c.toLowerCase().includes(searchTerm)) ||
+                    brecho.descricao.toLowerCase().includes(searchTerm)
+                );
+            });
+        }
+
+        /**
+         * Renderiza os resultados no mapa e na lista de cards.
+         */
+        function displayResults(results) {
+            const mapSection = document.getElementById('mapSection');
+            const emptyState = document.getElementById('emptyState');
+            const resultsContent = document.getElementById('resultsContent');
+            const resultsCount = document.getElementById('resultsCount');
+            const cardsGrid = document.getElementById('cardsGrid');
+
+            // 1. GARANTE A VISIBILIDADE DO MAPA E FORÇA O RECALCULO DE TAMANHO
+            mapSection.classList.add('show'); 
+            setTimeout(() => {
+                if (map) map.invalidateSize(); // Invalida o tamanho apenas se o mapa existir
+            }, 50); 
+
+            // 2. LIMPA MARCADORES ANTERIORES DOS BRECHÓS
+            clearMarkers();
+            
+            if (results.length === 0) {
+                // Mostra a mensagem de "sem resultados"
+                emptyState.style.display = 'block';
+                resultsContent.style.display = 'none';
+                emptyState.innerHTML = `
+                    <div class="no-results">
+                        <h3>😔 Nenhum brechó encontrado</h3>
+                        <p>Tente buscar por outros termos como "Osasco", "Barueri" ou "infantil"</p>
+                    </div>
+                `;
+                // Não altera a vista do mapa, mantendo o foco no usuário (se encontrado) ou na área padrão.
+                return;
+            }
+            
+            // 3. ADICIONA MARCADORES DOS BRECHÓS E AJUSTA O ZOOM
+            results.forEach(brecho => {
+                addMarker(brecho);
+            });
+
+            if (results.length > 0 && map) { 
+                // Cria um grupo de marcadores (incluindo o do usuário, se existir) para ajustar o zoom
+                let allMarkers = [...markers];
+                if (userMarker) {
+                    allMarkers.push(userMarker);
+                }
+
+                if (allMarkers.length > 0) {
+                    const group = L.featureGroup(allMarkers);
+                    // Ajusta o zoom para ver todos os marcadores encontrados
+                    map.fitBounds(group.getBounds().pad(0.1));
+                }
+            } 
+
+            // 4. RENDERIZA OS CARDS
+            resultsCount.textContent = `${results.length} ${results.length === 1 ? 'brechó encontrado' : 'brechós encontrados'}`;
+            cardsGrid.innerHTML = results.map(brecho => createCard(brecho)).join('');
+
+            // 5. MOSTRA OS CONTEÚDOS E ESCONDE O EMPTY STATE
+            emptyState.style.display = 'none';
+            resultsContent.style.display = 'block';
+
+            // Scroll suave para os resultados após a busca
+            setTimeout(() => {
+                mapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 200);
+        }
+
+        // Event listeners
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const query = document.getElementById('searchInput').value;
+            const results = searchBrechos(query);
+            displayResults(results);
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value;
+                const results = searchBrechos(query);
+                displayResults(results);
+            }
+        });
+
+        // *******************************************************************
+        // * Inicia a interface automaticamente ao carregar
+        // *******************************************************************
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Inicializa o Leaflet Map E tenta encontrar a localização do usuário
+            initializeLeafletMap();
+            
+            // 2. Exibe todos os brechós na carga inicial, eliminando o estado vazio.
+            displayResults(brechos);
+        });
+    </script>
+</body>
+</html>
