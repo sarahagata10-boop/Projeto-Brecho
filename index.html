@@ -4,32 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#9b59b6">
-    <meta name="description" content="Encontre brechós em Carapicuíba e região">
-    <title>🛍️ Moda da Z/O </title>
-    
+    <title>🛍️ Moda da Z/O - Brechós</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
-    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #9b59b6;
+            --primary-dark: #8e44ad;
+            --primary-light: #f3e5f5;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             min-height: 100vh;
         }
         
-        .container {
+        /* ===== LOGIN OVERLAY ===== */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .login-overlay.hidden { display: none; }
+        
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-box h2 {
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: #f0f0f0;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .form-content {
+            display: none;
+        }
+        
+        .form-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .error-msg {
+            color: red;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-msg.show { display: block; }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(155, 89, 182, 0.4);
+        }
+        
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-msg.show { display: block; }
+        
+        /* ===== MAIN APP ===== */
+        .app-container {
             max-width: 1400px;
             margin: 0 auto;
             background: #f8f9fa;
+            min-height: 100vh;
         }
         
         .header {
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             padding: 30px 20px;
             text-align: center;
@@ -39,14 +165,32 @@
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.95;
+        .user-info {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            align-items: center;
         }
         
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .logout-btn:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        /* ===== BUSCA ===== */
         .search-container {
             padding: 30px 20px;
             background: white;
@@ -55,23 +199,21 @@
         
         .search-box {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0 auto 20px;
             position: relative;
         }
         
         .search-input {
             width: 100%;
             padding: 18px 60px 18px 20px;
-            border: 3px solid #9b59b6;
+            border: 3px solid var(--primary);
             border-radius: 50px;
             font-size: 1.1rem;
-            transition: all 0.3s ease;
         }
         
         .search-input:focus {
             outline: none;
             box-shadow: 0 0 0 4px rgba(155, 89, 182, 0.2);
-            transform: translateY(-2px);
         }
         
         .search-btn {
@@ -79,51 +221,48 @@
             right: 8px;
             top: 50%;
             transform: translateY(-50%);
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
             padding: 12px 24px;
             border-radius: 50px;
-            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
         
-        .search-btn:hover {
-            transform: translateY(-50%) scale(1.05);
-            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.4);
+        .filters {
+            display: flex;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+            flex-wrap: wrap;
         }
         
-        .search-tips {
-            text-align: center;
-            margin-top: 15px;
-            color: #666;
-            font-size: 0.9rem;
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid var(--primary-light);
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
         }
         
+        /* ===== MAPA ===== */
         .map-section {
-            height: 300px;
-            position: relative;
+            height: 400px;
             display: none;
         }
         
-        .map-section.show {
-            display: block;
-        }
+        .map-section.show { display: block; }
         
         #map {
             height: 100%;
             width: 100%;
         }
         
+        /* ===== RESULTS ===== */
         .results-container {
             padding: 40px 20px;
-            display: block; 
-        }
-        
-        .results-container.show {
-            display: block;
         }
         
         .results-header {
@@ -132,7 +271,7 @@
         }
         
         .results-header h2 {
-            color: #8e44ad;
+            color: var(--primary-dark);
             font-size: 2rem;
             margin-bottom: 10px;
         }
@@ -153,10 +292,10 @@
         .brecho-card {
             background: white;
             border-radius: 15px;
-            border-left: 5px solid #9b59b6;
+            border-left: 5px solid var(--primary);
             padding: 25px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
         
         .brecho-card:hover {
@@ -170,12 +309,14 @@
             justify-content: space-between;
             align-items: start;
             margin-bottom: 15px;
+            gap: 10px;
         }
         
         .card-title {
             font-size: 1.5rem;
-            color: #8e44ad;
+            color: var(--primary-dark);
             font-weight: 700;
+            flex: 1;
         }
         
         .card-rating {
@@ -198,17 +339,12 @@
             font-weight: 600;
         }
         
-        .card-info {
-            margin-bottom: 15px;
-        }
-        
         .info-item {
             display: flex;
             align-items: start;
             gap: 10px;
             margin-bottom: 10px;
             color: #555;
-            line-height: 1.5;
         }
         
         .info-icon {
@@ -216,38 +352,14 @@
             min-width: 25px;
         }
         
-        .info-text {
-            flex: 1;
-        }
-        
         .info-link {
-            color: #9b59b6;
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
         }
         
         .info-link:hover {
-            color: #8e44ad;
             text-decoration: underline;
-        }
-        
-        .card-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e9ecef;
-        }
-        
-        .tag {
-            background: #f3e5f5;
-            color: #8e44ad;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
         }
         
         .schedule {
@@ -262,7 +374,6 @@
             display: flex;
             justify-content: space-between;
             padding: 4px 0;
-            color: #555;
         }
         
         .schedule-day {
@@ -270,26 +381,235 @@
         }
         
         .price-range {
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             padding: 10px 15px;
             border-radius: 10px;
             text-align: center;
             font-weight: 700;
-            font-size: 1.1rem;
             margin-top: 10px;
         }
         
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
         }
         
-        .no-results h3 {
-            font-size: 1.8rem;
-            color: #8e44ad;
-            margin-bottom: 15px;
+        .tag {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .action-btn.whatsapp {
+            background: #25d366;
+            color: white;
+        }
+        
+        .action-btn.directions {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* ===== GALERIA DE IMAGENS ===== */
+        .brecho-gallery {
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        
+        .gallery-main {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background: #e9ecef;
+            overflow: hidden;
+        }
+        
+        .gallery-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-main:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-nav:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .gallery-nav.prev {
+            left: 10px;
+        }
+        
+        .gallery-nav.next {
+            right: 10px;
+        }
+        
+        .gallery-counter {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .gallery-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 10px;
+            background: white;
+        }
+        
+        .gallery-thumb {
+            position: relative;
+            width: 100%;
+            padding-bottom: 75%;
+            background: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .gallery-thumb:hover {
+            border-color: var(--primary-light);
+            transform: scale(1.05);
+        }
+        
+        .gallery-thumb.active {
+            border-color: var(--primary);
+        }
+        
+        .gallery-thumb img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .no-images {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, #fff 100%);
+            color: #999;
+        }
+        
+        .no-images-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+        
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .image-modal.show {
+            display: flex;
+        }
+        
+        .image-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .image-modal-close:hover {
+            background: #e74c3c;
+            color: white;
+            transform: scale(1.1);
         }
         
         .empty-state {
@@ -303,36 +623,9 @@
             margin-bottom: 20px;
         }
         
-        .empty-state h3 {
-            font-size: 1.8rem;
-            color: #8e44ad;
-            margin-bottom: 15px;
-        }
-        
-        .custom-popup .leaflet-popup-content-wrapper {
-            border-radius: 15px;
-            border-left: 5px solid #9b59b6;
-        }
-        
-        .popup-title {
-            font-size: 1.3rem;
-            color: #8e44ad;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
             .cards-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .search-input {
-                padding: 15px 20px;
-                font-size: 1rem;
             }
             
             .search-btn {
@@ -343,14 +636,90 @@
                 width: 100%;
                 margin-top: 15px;
             }
+            
+            .filters {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Login/Register Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <h2>🛍️ Bem-vindo!</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Entrar</button>
+                <button class="tab" onclick="switchTab('register')">Criar Conta</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="form-content active" id="loginForm">
+                <div class="success-msg" id="loginSuccess"></div>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>📧 Email</label>
+                        <input type="email" id="loginEmail" required>
+                        <div class="error-msg" id="loginEmailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🔒 Senha</label>
+                        <input type="password" id="loginPassword" required>
+                        <div class="error-msg" id="loginPasswordError"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">Entrar</button>
+                </form>
+            </div>
+            
+            <!-- Register Form -->
+            <div class="form-content" id="registerForm">
+                <div class="success-msg" id="registerSuccess"></div>
+                
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>👤 Nome Completo</label>
+                        <input type="text" id="registerName" required>
+                        <div class="error-msg" id="registerNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📧 Email</label>
+                        <input type="email" id="registerEmail" required>
+                        <div class="error-msg" id="registerEmailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🔒 Senha (mínimo 6 caracteres)</label>
+                        <input type="password" id="registerPassword" required>
+                        <div class="error-msg" id="registerPasswordError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🔒 Confirmar Senha</label>
+                        <input type="password" id="registerPasswordConfirm" required>
+                        <div class="error-msg" id="registerPasswordConfirmError"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">Criar Conta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main App -->
+    <div class="app-container" id="mainApp" style="display: none;">
         <div class="header">
-            <h1>🛍️ Moda da Z/O </h1>
+            <h1>🛍️ Moda da Z/O</h1>
             <p>Encontre os melhores brechós da sua região</p>
+            
+            <div class="user-info">
+                <span id="userName"></span>
+                <button class="logout-btn" onclick="handleLogout()">Sair</button>
+            </div>
         </div>
         
         <div class="search-container">
@@ -359,12 +728,34 @@
                     type="text" 
                     id="searchInput" 
                     class="search-input" 
-                    placeholder="🔍 Busque por nome, bairro, cidade (Osasco, Barueri) ou características"
+                    placeholder="🔍 Busque por nome, cidade, bairro ou características"
                 />
-                <button class="search-btn" id="searchBtn">Buscar</button>
+                <button class="search-btn" onclick="performSearch()">Buscar</button>
             </div>
-            <div class="search-tips">
-                💡 Dica: Tente buscar por "Osasco", "Alphaville", "infantil" ou "grifes"
+            
+            <div class="filters">
+                <select class="filter-select" id="cityFilter" onchange="performSearch()">
+                    <option value="">Todas as cidades</option>
+                    <option value="Carapicuíba">Carapicuíba</option>
+                    <option value="Osasco">Osasco</option>
+                    <option value="Barueri">Barueri</option>
+                    <option value="Cotia">Cotia</option>
+                </select>
+                
+                <select class="filter-select" id="donationFilter" onchange="performSearch()">
+                    <option value="">Doações - Todos</option>
+                    <option value="troca">Com troca</option>
+                    <option value="sem-troca">Sem troca</option>
+                    <option value="nao">Não aceita</option>
+                </select>
+                
+                <select class="filter-select" id="typeFilter" onchange="performSearch()">
+                    <option value="">Tipo - Todos</option>
+                    <option value="feminino">Feminino</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="infantil">Infantil</option>
+                    <option value="premium">Premium/Grifes</option>
+                </select>
             </div>
         </div>
         
@@ -373,7 +764,7 @@
         </div>
         
         <div class="results-container" id="resultsContainer">
-            <div class="empty-state" id="emptyState" style="display: none;"> 
+            <div class="empty-state" id="emptyState">
                 <div class="empty-state-icon">🔍</div>
                 <h3>Faça uma busca para descobrir brechós incríveis!</h3>
                 <p>Digite o que procura e explore os melhores brechós da região</p>
@@ -389,12 +780,16 @@
         </div>
     </div>
 
+    <!-- Modal de Imagem Ampliada -->
+    <div class="image-modal" id="imageModal">
+        <button class="image-modal-close" onclick="closeImageModal()">✕</button>
+        <img id="modalImage" src="" alt="Imagem ampliada">
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-    
     <script>
-        // Base de dados dos brechós (AGORA EXPANDIDA)
+        // BASE DE DADOS DOS BRECHÓS
         const brechos = [
-            // === CARAPICUÍBA (EXISTENTES) ===
             {
                 id: 1,
                 nome: "Brechó Estilo & Consciência",
@@ -409,11 +804,18 @@
                 avaliacao: 4.8,
                 totalAvaliacoes: 127,
                 horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 14:00", "Domingo": "Fechado" },
-                precoMin: 10, precoMax: 150,
-                aceitaDoacao: "Sim - Troca por pecas",
+                precoMin: 10,
+                precoMax: 150,
+                aceitaDoacao: "Sim - Troca por peças",
+                tipoDoacao: "troca",
                 tiposPecas: "Usadas e novas",
-                caracteristicas: ["doações", "troca", "roupa feminina", "roupa masculina", "acessórios"],
-                descricao: "Brechó com excelente variedade e peças de qualidade. Aceita doações como forma de troca."
+                caracteristicas: ["doações", "troca", "roupa feminina", "feminino", "roupa masculina", "masculino", "acessórios"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800",
+                    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800",
+                    "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=800",
+                    "https://images.unsplash.com/photo-1558769132-cb1aea3c8565?w=800"
+                ]
             },
             {
                 id: 2,
@@ -429,11 +831,17 @@
                 avaliacao: 4.5,
                 totalAvaliacoes: 89,
                 horarios: { "Seg-Sex": "08:00 - 17:00", "Sábado": "08:00 - 12:00", "Domingo": "Fechado" },
-                precoMin: 5, precoMax: 80,
+                precoMin: 5,
+                precoMax: 80,
                 aceitaDoacao: "Sim - Apenas recebe doações",
+                tipoDoacao: "sem-troca",
                 tiposPecas: "Apenas usadas",
-                caracteristicas: ["doações sem troca", "roupa infantil", "brinquedos", "preços baixos", "social"],
-                descricao: "Projeto social que recebe doações e vende a preços acessíveis para a comunidade."
+                caracteristicas: ["doações sem troca", "roupa infantil", "infantil", "brinquedos", "preços baixos", "social"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800",
+                    "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800",
+                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800"
+                ]
             },
             {
                 id: 3,
@@ -449,11 +857,18 @@
                 avaliacao: 4.9,
                 totalAvaliacoes: 156,
                 horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 17:00", "Domingo": "10:00 - 14:00" },
-                precoMin: 30, precoMax: 300,
+                precoMin: 30,
+                precoMax: 300,
                 aceitaDoacao: "Não",
+                tipoDoacao: "nao",
                 tiposPecas: "Usadas e novas",
-                caracteristicas: ["vintage", "premium", "roupa feminina", "importados", "marcas famosas"],
-                descricao: "Especializado em peças vintage e de marcas renomadas. Curadoria especial."
+                caracteristicas: ["vintage", "premium", "roupa feminina", "feminino", "importados", "marcas famosas", "grifes"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800",
+                    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800",
+                    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800",
+                    "https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=800"
+                ]
             },
             {
                 id: 4,
@@ -469,11 +884,17 @@
                 avaliacao: 4.7,
                 totalAvaliacoes: 203,
                 horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 15:00", "Domingo": "Fechado" },
-                precoMin: 8, precoMax: 120,
+                precoMin: 8,
+                precoMax: 120,
                 aceitaDoacao: "Sim - Troca por peças",
+                tipoDoacao: "troca",
                 tiposPecas: "Usadas e novas",
                 caracteristicas: ["infantil", "bebê", "troca", "doações", "brinquedos", "roupa infantil"],
-                descricao: "Especializado em roupas infantis e bebês. Sistema de troca disponível."
+                imagens: [
+                    "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=800",
+                    "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800",
+                    "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=800"
+                ]
             },
             {
                 id: 5,
@@ -489,11 +910,18 @@
                 avaliacao: 4.6,
                 totalAvaliacoes: 94,
                 horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 16:00", "Domingo": "Fechado" },
-                precoMin: 15, precoMax: 200,
+                precoMin: 15,
+                precoMax: 200,
                 aceitaDoacao: "Não",
+                tipoDoacao: "nao",
                 tiposPecas: "Usadas e novas",
                 caracteristicas: ["masculino", "roupa masculina", "calçados", "acessórios masculinos", "ternos"],
-                descricao: "Focado no público masculino com peças sociais e casuais de qualidade."
+                imagens: [
+                    "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800",
+                    "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=800",
+                    "https://images.unsplash.com/photo-1598522325074-042db73aa4e6?w=800",
+                    "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800"
+                ]
             },
             {
                 id: 6,
@@ -509,13 +937,17 @@
                 avaliacao: 4.4,
                 totalAvaliacoes: 67,
                 horarios: { "Seg-Sex": "08:30 - 17:30", "Sábado": "09:00 - 13:00", "Domingo": "Fechado" },
-                precoMin: 5, precoMax: 60,
+                precoMin: 5,
+                precoMax: 60,
                 aceitaDoacao: "Sim - Apenas recebe doações",
+                tipoDoacao: "sem-troca",
                 tiposPecas: "Apenas usadas",
                 caracteristicas: ["doações sem troca", "social", "beneficente", "preços baixos", "todos os tipos"],
-                descricao: "Brechó solidário vinculado a instituição beneficente. Preços acessíveis para todos."
+                imagens: [
+                    "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=800",
+                    "https://images.unsplash.com/photo-1581338834647-b0fb40704e21?w=800"
+                ]
             },
-            // === OSASCO (NOVOS) ===
             {
                 id: 7,
                 nome: "Achados de Osasco",
@@ -530,11 +962,17 @@
                 avaliacao: 4.7,
                 totalAvaliacoes: 190,
                 horarios: { "Seg-Sex": "10:00 - 20:00", "Sábado": "10:00 - 18:00", "Domingo": "Fechado" },
-                precoMin: 20, precoMax: 250,
+                precoMin: 20,
+                precoMax: 250,
                 aceitaDoacao: "Sim - Consignação",
+                tipoDoacao: "troca",
                 tiposPecas: "Usadas premium",
-                caracteristicas: ["feminino", "masculino", "acessórios", "grifes", "consignação"],
-                descricao: "Peças de grife e alta qualidade no coração de Osasco."
+                caracteristicas: ["feminino", "masculino", "acessórios", "grifes", "premium", "consignação"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1558769132-cb1aea3c8565?w=800",
+                    "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800",
+                    "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800"
+                ]
             },
             {
                 id: 8,
@@ -550,13 +988,19 @@
                 avaliacao: 4.6,
                 totalAvaliacoes: 150,
                 horarios: { "Seg-Sex": "09:30 - 19:30", "Sábado": "10:00 - 16:00", "Domingo": "Fechado" },
-                precoMin: 15, precoMax: 180,
+                precoMin: 15,
+                precoMax: 180,
                 aceitaDoacao: "Não",
+                tipoDoacao: "nao",
                 tiposPecas: "Usadas",
                 caracteristicas: ["sustentável", "ecológico", "feminino", "acessórios", "troca"],
-                descricao: "Focado em moda sustentável e com opções de troca de peças."
+                imagens: [
+                    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800",
+                    "https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=800",
+                    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800",
+                    "https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?w=800"
+                ]
             },
-            // === BARUERI (NOVOS) ===
             {
                 id: 9,
                 nome: "Outlet Vintage Alphaville",
@@ -571,11 +1015,18 @@
                 avaliacao: 4.9,
                 totalAvaliacoes: 350,
                 horarios: { "Seg-Sex": "11:00 - 21:00", "Sábado": "10:00 - 20:00", "Domingo": "12:00 - 18:00" },
-                precoMin: 50, precoMax: 500,
+                precoMin: 50,
+                precoMax: 500,
                 aceitaDoacao: "Não",
+                tipoDoacao: "nao",
                 tiposPecas: "Novas e seminovas",
                 caracteristicas: ["luxo", "grifes", "premium", "acessórios de luxo", "eventos"],
-                descricao: "Brechó de luxo focado em peças de alta costura e grifes famosas."
+                imagens: [
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800",
+                    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800",
+                    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800",
+                    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800"
+                ]
             },
             {
                 id: 10,
@@ -591,13 +1042,17 @@
                 avaliacao: 4.3,
                 totalAvaliacoes: 70,
                 horarios: { "Seg-Sex": "09:00 - 17:00", "Sábado": "09:00 - 13:00", "Domingo": "Fechado" },
-                precoMin: 5, precoMax: 100,
+                precoMin: 5,
+                precoMax: 100,
                 aceitaDoacao: "Sim - Apenas recebe doações",
+                tipoDoacao: "sem-troca",
                 tiposPecas: "Apenas usadas",
                 caracteristicas: ["preços baixos", "doações", "social", "feminino", "infantil"],
-                descricao: "Brechó popular com grande rotatividade de peças."
+                imagens: [
+                    "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800",
+                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800"
+                ]
             },
-            // === COTIA (NOVOS) ===
             {
                 id: 11,
                 nome: "Recicla Moda Cotia",
@@ -612,11 +1067,17 @@
                 avaliacao: 4.8,
                 totalAvaliacoes: 210,
                 horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 17:00", "Domingo": "Fechado" },
-                precoMin: 25, precoMax: 350,
+                precoMin: 25,
+                precoMax: 350,
                 aceitaDoacao: "Sim - Troca por créditos",
+                tipoDoacao: "troca",
                 tiposPecas: "Usadas e novas",
                 caracteristicas: ["feminino", "acessórios", "troca", "ecológico", "premium"],
-                descricao: "Brechó moderno na Granja Viana com foco em sustentabilidade e peças selecionadas."
+                imagens: [
+                    "https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=800",
+                    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800",
+                    "https://images.unsplash.com/photo-1558769132-cb1aea3c8565?w=800"
+                ]
             },
             {
                 id: 12,
@@ -632,157 +1093,690 @@
                 avaliacao: 4.4,
                 totalAvaliacoes: 45,
                 horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 14:00", "Domingo": "Fechado" },
-                precoMin: 10, precoMax: 80,
+                precoMin: 10,
+                precoMax: 80,
                 aceitaDoacao: "Não",
+                tipoDoacao: "nao",
                 tiposPecas: "Usadas",
                 caracteristicas: ["infantil", "preços baixos", "bazar", "roupa de cama"],
-                descricao: "Pequeno bazar com foco em utilidades domésticas e vestuário infantil."
+                imagens: [
+                    "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800",
+                    "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=800"
+                ]
+            },
+            {
+                id: 13,
+                nome: "Brechó Chic & Cia",
+                endereco: "Rua Angelina, 890 - Jardim Piratininga",
+                cidade: "Osasco",
+                bairro: "Jardim Piratininga",
+                telefone: "(11) 3601-7788",
+                whatsapp: "5511936017788",
+                site: "https://www.chicecia.com.br",
+                lat: -23.5289,
+                lng: -46.7911,
+                avaliacao: 4.7,
+                totalAvaliacoes: 134,
+                horarios: { "Seg-Sex": "09:00 - 18:30", "Sábado": "09:00 - 15:00", "Domingo": "Fechado" },
+                precoMin: 15,
+                precoMax: 180,
+                aceitaDoacao: "Sim - Consignação",
+                tipoDoacao: "troca",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["feminino", "consignação", "grifes", "acessórios", "bolsas"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800",
+                    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800",
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800"
+                ]
+            },
+            {
+                id: 14,
+                nome: "Brechó Kids & Teens",
+                endereco: "Av. Maria Campos, 567 - Jardim das Flores",
+                cidade: "Carapicuíba",
+                bairro: "Jardim das Flores",
+                telefone: "(11) 4183-9900",
+                whatsapp: "5511941839900",
+                site: null,
+                lat: -23.5267,
+                lng: -46.8312,
+                avaliacao: 4.6,
+                totalAvaliacoes: 98,
+                horarios: { "Seg-Sex": "08:30 - 18:00", "Sábado": "09:00 - 14:00", "Domingo": "Fechado" },
+                precoMin: 10,
+                precoMax: 95,
+                aceitaDoacao: "Sim - Troca por peças",
+                tipoDoacao: "troca",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["infantil", "teens", "adolescente", "troca", "uniformes escolares"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=800",
+                    "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800"
+                ]
+            },
+            {
+                id: 15,
+                nome: "Recanto dos Garimpos",
+                endereco: "Rua Coronel Bento, 234 - Bela Vista",
+                cidade: "Osasco",
+                bairro: "Bela Vista",
+                telefone: "(11) 3685-4455",
+                whatsapp: "5511936854455",
+                site: null,
+                lat: -23.5423,
+                lng: -46.7889,
+                avaliacao: 4.5,
+                totalAvaliacoes: 76,
+                horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 16:00", "Domingo": "Fechado" },
+                precoMin: 8,
+                precoMax: 120,
+                aceitaDoacao: "Não",
+                tipoDoacao: "nao",
+                tiposPecas: "Apenas usadas",
+                caracteristicas: ["vintage", "antiguidades", "decoração", "livros", "discos"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=800",
+                    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800",
+                    "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800"
+                ]
+            },
+            {
+                id: 16,
+                nome: "Brechó Premium Tamboré",
+                endereco: "Av. Piracema, 1000 - Tamboré",
+                cidade: "Barueri",
+                bairro: "Tamboré",
+                telefone: "(11) 4195-8800",
+                whatsapp: "5511941958800",
+                site: "https://www.premiumtambore.com.br",
+                lat: -23.5034,
+                lng: -46.8445,
+                avaliacao: 4.9,
+                totalAvaliacoes: 287,
+                horarios: { "Seg-Sex": "10:00 - 20:00", "Sábado": "10:00 - 19:00", "Domingo": "12:00 - 17:00" },
+                precoMin: 80,
+                precoMax: 600,
+                aceitaDoacao: "Não",
+                tipoDoacao: "nao",
+                tiposPecas: "Seminovas e novas",
+                caracteristicas: ["luxo", "premium", "grifes internacionais", "bolsas de grife", "sapatos importados"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800",
+                    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800",
+                    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800",
+                    "https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=800"
+                ]
+            },
+            {
+                id: 17,
+                nome: "Brechó Social Acolher",
+                endereco: "Rua São Francisco, 145 - Vila Helena",
+                cidade: "Carapicuíba",
+                bairro: "Vila Helena",
+                telefone: "(11) 4182-3344",
+                whatsapp: "5511941823344",
+                site: null,
+                lat: -23.5201,
+                lng: -46.8389,
+                avaliacao: 4.3,
+                totalAvaliacoes: 54,
+                horarios: { "Seg-Sex": "08:00 - 17:00", "Sábado": "09:00 - 12:00", "Domingo": "Fechado" },
+                precoMin: 3,
+                precoMax: 50,
+                aceitaDoacao: "Sim - Apenas recebe doações",
+                tipoDoacao: "sem-troca",
+                tiposPecas: "Apenas usadas",
+                caracteristicas: ["social", "beneficente", "preços baixos", "doações sem troca", "todos os tipos"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800",
+                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800"
+                ]
+            },
+            {
+                id: 18,
+                nome: "Estilo Livre Brechó",
+                endereco: "Rua Antônio Agu, 678 - Presidente Altino",
+                cidade: "Osasco",
+                bairro: "Presidente Altino",
+                telefone: "(11) 3607-5566",
+                whatsapp: "5511936075566",
+                site: "https://www.estilolivre.com.br",
+                lat: -23.5312,
+                lng: -46.7734,
+                avaliacao: 4.8,
+                totalAvaliacoes: 165,
+                horarios: { "Seg-Sex": "09:30 - 19:00", "Sábado": "09:30 - 17:00", "Domingo": "Fechado" },
+                precoMin: 18,
+                precoMax: 220,
+                aceitaDoacao: "Sim - Consignação",
+                tipoDoacao: "troca",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["feminino", "masculino", "alternativo", "rock", "vintage"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1558769132-cb1aea3c8565?w=800",
+                    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800",
+                    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800"
+                ]
+            },
+            {
+                id: 19,
+                nome: "Brechó Plus Size Empoderada",
+                endereco: "Av. dos Lírios, 890 - Jardim Veloso",
+                cidade: "Osasco",
+                bairro: "Jardim Veloso",
+                telefone: "(11) 3688-7799",
+                whatsapp: "5511936887799",
+                site: "https://www.plussizeempoderada.com.br",
+                lat: -23.5378,
+                lng: -46.7856,
+                avaliacao: 4.9,
+                totalAvaliacoes: 223,
+                horarios: { "Seg-Sex": "10:00 - 19:00", "Sábado": "10:00 - 18:00", "Domingo": "Fechado" },
+                precoMin: 25,
+                precoMax: 180,
+                aceitaDoacao: "Não",
+                tipoDoacao: "nao",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["plus size", "feminino", "tamanhos grandes", "moda inclusiva", "GG ao EGG"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800",
+                    "https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=800",
+                    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800"
+                ]
+            },
+            {
+                id: 20,
+                nome: "Cantinho Retrô",
+                endereco: "Rua Marechal Deodoro, 456 - Centro",
+                cidade: "Barueri",
+                bairro: "Centro",
+                telefone: "(11) 4197-6655",
+                whatsapp: "5511941976655",
+                site: null,
+                lat: -23.5123,
+                lng: -46.8723,
+                avaliacao: 4.6,
+                totalAvaliacoes: 112,
+                horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 15:00", "Domingo": "Fechado" },
+                precoMin: 12,
+                precoMax: 150,
+                aceitaDoacao: "Sim - Troca por peças",
+                tipoDoacao: "troca",
+                tiposPecas: "Apenas usadas",
+                caracteristicas: ["vintage", "retrô", "anos 80", "anos 90", "colecionáveis"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800",
+                    "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800"
+                ]
+            },
+            {
+                id: 21,
+                nome: "Brechó Gestante & Bebê",
+                endereco: "Rua Arminda, 234 - Jardim Taipas",
+                cidade: "Carapicuíba",
+                bairro: "Jardim Taipas",
+                telefone: "(11) 4181-4488",
+                whatsapp: "5511941814488",
+                site: null,
+                lat: -23.5245,
+                lng: -46.8445,
+                avaliacao: 4.7,
+                totalAvaliacoes: 189,
+                horarios: { "Seg-Sex": "09:00 - 18:00", "Sábado": "09:00 - 16:00", "Domingo": "Fechado" },
+                precoMin: 8,
+                precoMax: 110,
+                aceitaDoacao: "Sim - Troca por peças",
+                tipoDoacao: "troca",
+                tiposPecas: "Usadas e novas",
+                caracteristicas: ["gestante", "bebê", "maternidade", "infantil", "enxoval"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=800",
+                    "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800",
+                    "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=800"
+                ]
+            },
+            {
+                id: 22,
+                nome: "Espaço Fashion Granja",
+                endereco: "Av. São Camilo, 2300 - Granja Viana",
+                cidade: "Cotia",
+                bairro: "Granja Viana",
+                telefone: "(11) 4611-9988",
+                whatsapp: "5511946119988",
+                site: "https://www.espacofashiongranja.com.br",
+                lat: -23.5912,
+                lng: -46.8978,
+                avaliacao: 4.8,
+                totalAvaliacoes: 267,
+                horarios: { "Seg-Sex": "10:00 - 20:00", "Sábado": "10:00 - 19:00", "Domingo": "12:00 - 18:00" },
+                precoMin: 35,
+                precoMax: 450,
+                aceitaDoacao: "Não",
+                tipoDoacao: "nao",
+                tiposPecas: "Seminovas e novas",
+                caracteristicas: ["premium", "grifes", "feminino", "masculino", "eventos"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=800",
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800",
+                    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800",
+                    "https://images.unsplash.com/photo-1558769132-cb1aea3c8565?w=800"
+                ]
+            },
+            {
+                id: 23,
+                nome: "Brechó Moda Consciente",
+                endereco: "Rua Jundiaí, 567 - Jardim Bussocaba",
+                cidade: "Osasco",
+                bairro: "Jardim Bussocaba",
+                telefone: "(11) 3602-3377",
+                whatsapp: "5511936023377",
+                site: null,
+                lat: -23.5456,
+                lng: -46.7945,
+                avaliacao: 4.5,
+                totalAvaliacoes: 87,
+                horarios: { "Seg-Sex": "09:00 - 18:30", "Sábado": "09:00 - 15:00", "Domingo": "Fechado" },
+                precoMin: 10,
+                precoMax: 130,
+                aceitaDoacao: "Sim - Troca por créditos",
+                tipoDoacao: "troca",
+                tiposPecas: "Usadas",
+                caracteristicas: ["sustentável", "ecológico", "feminino", "upcycling", "reciclagem"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800",
+                    "https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=800",
+                    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800"
+                ]
+            },
+            {
+                id: 24,
+                nome: "Brechó do Bairro",
+                endereco: "Rua Guaicurus, 123 - Vila Maria",
+                cidade: "Carapicuíba",
+                bairro: "Vila Maria",
+                telefone: "(11) 4180-2255",
+                whatsapp: "5511941802255",
+                site: null,
+                lat: -23.5178,
+                lng: -46.8401,
+                avaliacao: 4.4,
+                totalAvaliacoes: 63,
+                horarios: { "Seg-Sex": "08:30 - 17:30", "Sábado": "09:00 - 13:00", "Domingo": "Fechado" },
+                precoMin: 5,
+                precoMax: 70,
+                aceitaDoacao: "Sim - Apenas recebe doações",
+                tipoDoacao: "sem-troca",
+                tiposPecas: "Apenas usadas",
+                caracteristicas: ["comunitário", "preços baixos", "doações sem troca", "todos os tipos", "bazar"],
+                imagens: [
+                    "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800",
+                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800"
+                ]
             }
         ];
-
-        // Variáveis globais para o mapa
+        
+        // VARIÁVEIS GLOBAIS
+        let users = JSON.parse(localStorage.getItem('brechoUsers') || '[]');
+        let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
         let map = null;
         let markers = [];
-        let userMarker = null; // Marcador exclusivo para a localização do usuário
-
-        /**
-         * Inicializa o mapa Leaflet uma única vez.
-         */
-        function initializeLeafletMap() {
+        
+        // INICIALIZAÇÃO
+        if (currentUser) {
+            showMainApp();
+        }
+        
+        // ===== FUNÇÕES DE AUTENTICAÇÃO =====
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.form-content').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + 'Form').classList.add('active');
+            clearErrors();
+        }
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!validateEmail(email)) {
+                showError('loginEmail', 'Email inválido');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('loginPassword', 'Senha deve ter no mínimo 6 caracteres');
+                return;
+            }
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (!user) {
+                showError('loginPassword', 'Email ou senha incorretos');
+                return;
+            }
+            
+            currentUser = { email: user.email, name: user.name };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            showSuccess('loginSuccess', `Bem-vindo de volta, ${user.name}!`);
+            
+            setTimeout(() => {
+                showMainApp();
+            }, 1500);
+        }
+        
+        function handleRegister(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            
+            if (name.length < 3) {
+                showError('registerName', 'Nome deve ter no mínimo 3 caracteres');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showError('registerEmail', 'Email inválido');
+                return;
+            }
+            
+            if (users.find(u => u.email === email)) {
+                showError('registerEmail', 'Este email já está cadastrado');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('registerPassword', 'Senha deve ter no mínimo 6 caracteres');
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                showError('registerPasswordConfirm', 'As senhas não conferem');
+                return;
+            }
+            
+            const newUser = { name, email, password };
+            users.push(newUser);
+            localStorage.setItem('brechoUsers', JSON.stringify(users));
+            
+            currentUser = { email: newUser.email, name: newUser.name };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            showSuccess('registerSuccess', `Conta criada com sucesso! Bem-vindo, ${name}!`);
+            
+            setTimeout(() => {
+                showMainApp();
+            }, 1500);
+        }
+        
+        function handleLogout() {
+            if (confirm('Deseja realmente sair?')) {
+                currentUser = null;
+                localStorage.removeItem('currentUser');
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('loginOverlay').classList.remove('hidden');
+            }
+        }
+        
+        function showMainApp() {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('userName').textContent = `Olá, ${currentUser.name}!`;
+            document.querySelectorAll('form').forEach(f => f.reset());
+            
             if (!map) {
-                // Inicializa o mapa com uma localização padrão (Região Oeste)
-                // Esta será a vista inicial caso a geolocalização falhe.
-                map = L.map('map').setView([-23.535, -46.840], 12);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors',
-                    maxZoom: 19
-                }).addTo(map);
-
-                // Tenta encontrar a localização do usuário imediatamente após a inicialização
-                findAndSetUserLocation();
+                initMap();
             }
         }
-
-        /**
-         * Tenta encontrar a localização do usuário e centralizar o mapa.
-         */
-        function findAndSetUserLocation() {
-            if ("geolocation" in navigator) {
-                // Solicita a geolocalização
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        const userLatLng = [lat, lng];
-
-                        // Centraliza o mapa na localização do usuário
-                        map.setView(userLatLng, 14);
-
-                        // Cria um ícone customizado para o usuário (em azul)
-                        const userIcon = L.divIcon({
-                            className: 'user-marker',
-                            html: '<div style="background: #3498db; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px;">👤</div>',
-                            iconSize: [36, 36],
-                            iconAnchor: [18, 18]
-                        });
-
-                        // Remove o marcador anterior do usuário, se existir
-                        if (userMarker) {
-                            map.removeLayer(userMarker);
-                        }
-
-                        // Adiciona o novo marcador do usuário
-                        userMarker = L.marker(userLatLng, { icon: userIcon }).addTo(map)
-                            .bindPopup("<b>Sua Localização Atual</b>").openPopup();
-
-                        console.log("Localização do usuário encontrada e mapa centralizado.");
-                    },
-                    (error) => {
-                        console.warn(`Erro na geolocalização: ${error.message}`);
-                        // Em caso de erro, apenas mantém a vista padrão.
-                        alert("Não foi possível acessar sua localização. O mapa será exibido na região central.");
-                    },
-                    {
-                        enableHighAccuracy: true, // Tenta obter a melhor precisão possível
-                        timeout: 5000,           // Tempo limite de 5 segundos
-                        maximumAge: 0            // Não aceita cache
-                    }
-                );
-            } else {
-                console.log("Geolocalização não é suportada por este navegador.");
-                alert("Seu navegador não suporta geolocalização. O mapa será exibido na região central.");
-            }
+        
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
-
-
-        /**
-         * Remove todos os marcadores existentes do mapa.
-         */
+        
+        function showError(inputId, message) {
+            const error = document.getElementById(inputId + 'Error');
+            error.textContent = message;
+            error.classList.add('show');
+        }
+        
+        function clearErrors() {
+            document.querySelectorAll('.error-msg, .success-msg').forEach(e => {
+                e.classList.remove('show');
+                e.textContent = '';
+            });
+        }
+        
+        function showSuccess(id, message) {
+            const success = document.getElementById(id);
+            success.textContent = message;
+            success.classList.add('show');
+        }
+        
+        // ===== FUNÇÕES DO MAPA =====
+        function initMap() {
+            map = L.map('map').setView([-23.535, -46.840], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+        }
+        
         function clearMarkers() {
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
         }
-
-        /**
-         * Cria um ícone de marcador customizado (o saco de compras roxo).
-         */
-        function createCustomIcon() {
-            return L.divIcon({
-                className: 'custom-marker',
-                html: '<div style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px;">🛍️</div>',
-                iconSize: [36, 36],
-                iconAnchor: [18, 18]
-            });
-        }
-
-        /**
-         * Adiciona um marcador para um brechó específico.
-         */
+        
         function addMarker(brecho) {
-            const marker = L.marker([brecho.lat, brecho.lng], {
-                icon: createCustomIcon()
-            }).addTo(map);
-
-            const popupContent = createPopupContent(brecho);
-            marker.bindPopup(popupContent, {
-                className: 'custom-popup',
-                maxWidth: 350
-            });
-
-            markers.push(marker);
-            return marker;
-        }
-
-        /**
-         * Cria o conteúdo HTML do popup.
-         */
-        function createPopupContent(brecho) {
+            const marker = L.marker([brecho.lat, brecho.lng]).addTo(map);
+            
             const stars = '⭐'.repeat(Math.floor(brecho.avaliacao));
-            return `
+            const popupContent = `
                 <div style="padding: 10px;">
-                    <div class="popup-title">${brecho.nome}</div>
-                    <div style="margin-bottom: 10px;">
-                        <span style="color: #ffc107; font-size: 1.1rem;">${stars}</span>
-                        <span style="color: #666; margin-left: 5px;">${brecho.avaliacao} (${brecho.totalAvaliacoes} avaliações)</span>
-                    </div>
+                    <h3 style="color: #8e44ad; margin-bottom: 10px;">${brecho.nome}</h3>
                     <div style="margin-bottom: 8px;">
-                        <strong>📍</strong> ${brecho.endereco}, ${brecho.cidade}
+                        <span style="color: #ffc107;">${stars}</span>
+                        <span style="color: #666; margin-left: 5px;">${brecho.avaliacao} (${brecho.totalAvaliacoes})</span>
                     </div>
-                    <div style="margin-bottom: 8px;">
-                        <strong>💰</strong> R$${brecho.precoMin} - R$${brecho.precoMax}
-                    </div>
+                    <p style="margin-bottom: 8px;"><strong>📍</strong> ${brecho.endereco}, ${brecho.cidade}</p>
+                    <p style="margin-bottom: 8px;"><strong>💰</strong> R$${brecho.precoMin} - R$${brecho.precoMax}</p>
                     ${brecho.whatsapp ? `
-                        <a href="https://wa.me/${brecho.whatsapp}" target="_blank" style="display: inline-block; background: #25d366; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; margin-top: 10px;">
+                        <a href="https://wa.me/${brecho.whatsapp}" target="_blank" 
+                           style="display: inline-block; background: #25d366; color: white; 
+                                  padding: 8px 15px; border-radius: 8px; text-decoration: none; margin-top: 10px;">
                             💬 WhatsApp
                         </a>
                     ` : ''}
                 </div>
             `;
+            
+            marker.bindPopup(popupContent, { maxWidth: 350 });
+            markers.push(marker);
+        }
+        
+        // ===== FUNÇÕES DE BUSCA =====
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cityFilter = document.getElementById('cityFilter').value;
+            const donationFilter = document.getElementById('donationFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            
+            let filtered = [...brechos];
+            
+            if (searchTerm) {
+                filtered = filtered.filter(b => 
+                    b.nome.toLowerCase().includes(searchTerm) ||
+                    b.cidade.toLowerCase().includes(searchTerm) ||
+                    b.bairro.toLowerCase().includes(searchTerm) ||
+                    b.caracteristicas.some(c => c.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            if (cityFilter) {
+                filtered = filtered.filter(b => b.cidade === cityFilter);
+            }
+            
+            if (donationFilter) {
+                filtered = filtered.filter(b => b.tipoDoacao === donationFilter);
+            }
+            
+            if (typeFilter) {
+                filtered = filtered.filter(b => 
+                    b.caracteristicas.some(c => c.toLowerCase().includes(typeFilter.toLowerCase()))
+                );
+            }
+            
+            displayResults(filtered);
+        }
+        
+        function displayResults(results) {
+            const mapSection = document.getElementById('mapSection');
+            const emptyState = document.getElementById('emptyState');
+            const resultsContent = document.getElementById('resultsContent');
+            const resultsCount = document.getElementById('resultsCount');
+            const cardsGrid = document.getElementById('cardsGrid');
+            
+            mapSection.classList.add('show');
+            setTimeout(() => {
+                if (map) map.invalidateSize();
+            }, 50);
+            
+            clearMarkers();
+            
+            if (results.length === 0) {
+                emptyState.style.display = 'block';
+                resultsContent.style.display = 'none';
+                emptyState.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: #666;">
+                        <h3 style="font-size: 1.8rem; color: #8e44ad; margin-bottom: 15px;">
+                            😔 Nenhum brechó encontrado
+                        </h3>
+                        <p>Tente buscar por outros termos</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            results.forEach(b => addMarker(b));
+            
+            if (results.length > 0 && map) {
+                const group = L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+            
+            resultsCount.textContent = `${results.length} ${results.length === 1 ? 'brechó encontrado' : 'brechós encontrados'}`;
+            cardsGrid.innerHTML = results.map(b => createCard(b)).join('');
+            
+            emptyState.style.display = 'none';
+            resultsContent.style.display = 'block';
+        }
+        
+        // ===== FUNÇÕES DA GALERIA =====
+        function createGallery(brecho) {
+            if (!brecho.imagens || brecho.imagens.length === 0) {
+                return `
+                    <div class="brecho-gallery">
+                        <div class="no-images">
+                            <div class="no-images-icon">🖼️</div>
+                            <div>Sem fotos disponíveis</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const thumbnailsHtml = brecho.imagens.map((img, index) => `
+                <div class="gallery-thumb ${index === 0 ? 'active' : ''}" 
+                     onclick="setGalleryImage(${brecho.id}, ${index})">
+                    <img src="${img}" alt="${brecho.nome} - Foto ${index + 1}" loading="lazy">
+                </div>
+            `).join('');
+
+            return `
+                <div class="brecho-gallery" id="gallery-${brecho.id}">
+                    <div class="gallery-main">
+                        <img src="${brecho.imagens[0]}" 
+                             alt="${brecho.nome}" 
+                             onclick="openImageModal('${brecho.imagens[0]}')"
+                             id="gallery-main-${brecho.id}">
+                        ${brecho.imagens.length > 1 ? `
+                            <button class="gallery-nav prev" onclick="navigateGallery(${brecho.id}, -1)">◀</button>
+                            <button class="gallery-nav next" onclick="navigateGallery(${brecho.id}, 1)">▶</button>
+                            <div class="gallery-counter">
+                                <span id="gallery-counter-${brecho.id}">1</span> / ${brecho.imagens.length}
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${brecho.imagens.length > 1 ? `
+                        <div class="gallery-thumbnails">
+                            ${thumbnailsHtml}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
         }
 
-        /**
-         * Cria o card HTML para um brechó.
-         */
+        function navigateGallery(brechoId, direction) {
+            const brecho = brechos.find(b => b.id === brechoId);
+            if (!brecho || !brecho.imagens) return;
+
+            const mainImg = document.getElementById(`gallery-main-${brechoId}`);
+            const currentSrc = mainImg.src;
+            const currentIndex = brecho.imagens.findIndex(img => mainImg.src.includes(img.split('?')[0]));
+            let newIndex = currentIndex + direction;
+
+            if (newIndex < 0) newIndex = brecho.imagens.length - 1;
+            if (newIndex >= brecho.imagens.length) newIndex = 0;
+
+            setGalleryImage(brechoId, newIndex);
+        }
+
+        function setGalleryImage(brechoId, index) {
+            const brecho = brechos.find(b => b.id === brechoId);
+            if (!brecho || !brecho.imagens) return;
+
+            const gallery = document.getElementById(`gallery-${brechoId}`);
+            const mainImg = document.getElementById(`gallery-main-${brechoId}`);
+            const counter = document.getElementById(`gallery-counter-${brechoId}`);
+            const thumbs = gallery.querySelectorAll('.gallery-thumb');
+
+            mainImg.src = brecho.imagens[index];
+            if (counter) counter.textContent = index + 1;
+
+            thumbs.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        function openImageModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = imageSrc;
+            modal.classList.add('show');
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+        }
+
+        // Fecha modal clicando fora ou ESC
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'imageModal') closeImageModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeImageModal();
+        });
+        
+        // ===== FUNÇÕES DE CRIAÇÃO DE CARDS =====
         function createCard(brecho) {
             const stars = '⭐'.repeat(Math.floor(brecho.avaliacao));
             const horariosHtml = Object.entries(brecho.horarios)
@@ -792,13 +1786,18 @@
                         <span>${horario}</span>
                     </div>
                 `).join('');
-
+            
             const tagsHtml = brecho.caracteristicas
+                .slice(0, 5)
                 .map(tag => `<span class="tag">${tag}</span>`)
                 .join('');
-
+            
+            const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${brecho.lat},${brecho.lng}`;
+            
             return `
                 <div class="brecho-card">
+                    ${createGallery(brecho)}
+                    
                     <div class="card-header">
                         <h3 class="card-title">${brecho.nome}</h3>
                         <div class="card-rating">
@@ -807,62 +1806,56 @@
                         </div>
                     </div>
                     
-                    <div class="card-info">
-                        <div class="info-item">
-                            <span class="info-icon">📍</span>
-                            <span class="info-text">${brecho.endereco}<br><strong>${brecho.cidade}</strong> - ${brecho.bairro}</span>
-                        </div>
-                        
-                        <div class="info-item">
-                            <span class="info-icon">📞</span>
-                            <span class="info-text">${brecho.telefone}</span>
-                        </div>
-                        
-                        ${brecho.whatsapp ? `
-                            <div class="info-item">
-                                <span class="info-icon">💬</span>
-                                <span class="info-text">
-                                    <a href="https://wa.me/${brecho.whatsapp}" target="_blank" class="info-link">
-                                        Enviar WhatsApp
-                                    </a>
-                                </span>
-                            </div>
-                        ` : ''}
-                        
-                        ${brecho.site ? `
-                            <div class="info-item">
-                                <span class="info-icon">🌐</span>
-                                <span class="info-text">
-                                    <a href="${brecho.site}" target="_blank" class="info-link">
-                                        Visitar site
-                                    </a>
-                                </span>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="info-item">
-                            <span class="info-icon">💬</span>
-                            <span class="info-text">${brecho.totalAvaliacoes} avaliações</span>
-                        </div>
-                        
-                        <div class="info-item">
-                            <span class="info-icon">👕</span>
-                            <span class="info-text">${brecho.tiposPecas}</span>
-                        </div>
-                        
-                        <div class="info-item">
-                            <span class="info-icon">🎁</span>
-                            <span class="info-text"><strong>Doações:</strong> ${brecho.aceitaDoacao}</span>
-                        </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <span>${brecho.endereco}<br><strong>${brecho.cidade}</strong> - ${brecho.bairro}</span>
                     </div>
                     
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <span>${brecho.telefone}</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">💬</span>
+                        <span>${brecho.totalAvaliacoes} avaliações</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">👕</span>
+                        <span>${brecho.tiposPecas}</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">🎁</span>
+                        <span><strong>Doações:</strong> ${brecho.aceitaDoacao}</span>
+                    </div>
+                    
+                    ${brecho.site ? `
+                        <div class="info-item">
+                            <span class="info-icon">🌐</span>
+                            <a href="${brecho.site}" target="_blank" class="info-link">Visitar site</a>
+                        </div>
+                    ` : ''}
+                    
                     <div class="schedule">
-                        <strong>🕐 Horários de Funcionamento:</strong>
+                        <strong>🕐 Horários:</strong>
                         ${horariosHtml}
                     </div>
                     
                     <div class="price-range">
                         💰 R$${brecho.precoMin} - R$${brecho.precoMax}
+                    </div>
+                    
+                    <div class="action-buttons">
+                        ${brecho.whatsapp ? `
+                            <a href="https://wa.me/${brecho.whatsapp}" target="_blank" class="action-btn whatsapp">
+                                💬 WhatsApp
+                            </a>
+                        ` : ''}
+                        <a href="${googleMapsUrl}" target="_blank" class="action-btn directions">
+                            🗺️ Como Chegar
+                        </a>
                     </div>
                     
                     <div class="card-tags">
@@ -871,120 +1864,16 @@
                 </div>
             `;
         }
-
-        /**
-         * Filtra os brechós com base na busca do usuário.
-         */
-        function searchBrechos(query) {
-            const searchTerm = query.toLowerCase().trim();
-            
-            if (!searchTerm) {
-                // Retorna todos se a busca estiver vazia
-                return brechos;
-            }
-            
-            return brechos.filter(brecho => {
-                return (
-                    brecho.nome.toLowerCase().includes(searchTerm) ||
-                    brecho.cidade.toLowerCase().includes(searchTerm) || 
-                    brecho.bairro.toLowerCase().includes(searchTerm) ||
-                    brecho.caracteristicas.some(c => c.toLowerCase().includes(searchTerm)) ||
-                    brecho.descricao.toLowerCase().includes(searchTerm)
-                );
-            });
-        }
-
-        /**
-         * Renderiza os resultados no mapa e na lista de cards.
-         */
-        function displayResults(results) {
-            const mapSection = document.getElementById('mapSection');
-            const emptyState = document.getElementById('emptyState');
-            const resultsContent = document.getElementById('resultsContent');
-            const resultsCount = document.getElementById('resultsCount');
-            const cardsGrid = document.getElementById('cardsGrid');
-
-            // 1. GARANTE A VISIBILIDADE DO MAPA E FORÇA O RECALCULO DE TAMANHO
-            mapSection.classList.add('show'); 
-            setTimeout(() => {
-                if (map) map.invalidateSize(); // Invalida o tamanho apenas se o mapa existir
-            }, 50); 
-
-            // 2. LIMPA MARCADORES ANTERIORES DOS BRECHÓS
-            clearMarkers();
-            
-            if (results.length === 0) {
-                // Mostra a mensagem de "sem resultados"
-                emptyState.style.display = 'block';
-                resultsContent.style.display = 'none';
-                emptyState.innerHTML = `
-                    <div class="no-results">
-                        <h3>😔 Nenhum brechó encontrado</h3>
-                        <p>Tente buscar por outros termos como "Osasco", "Barueri" ou "infantil"</p>
-                    </div>
-                `;
-                // Não altera a vista do mapa, mantendo o foco no usuário (se encontrado) ou na área padrão.
-                return;
-            }
-            
-            // 3. ADICIONA MARCADORES DOS BRECHÓS E AJUSTA O ZOOM
-            results.forEach(brecho => {
-                addMarker(brecho);
-            });
-
-            if (results.length > 0 && map) { 
-                // Cria um grupo de marcadores (incluindo o do usuário, se existir) para ajustar o zoom
-                let allMarkers = [...markers];
-                if (userMarker) {
-                    allMarkers.push(userMarker);
-                }
-
-                if (allMarkers.length > 0) {
-                    const group = L.featureGroup(allMarkers);
-                    // Ajusta o zoom para ver todos os marcadores encontrados
-                    map.fitBounds(group.getBounds().pad(0.1));
-                }
-            } 
-
-            // 4. RENDERIZA OS CARDS
-            resultsCount.textContent = `${results.length} ${results.length === 1 ? 'brechó encontrado' : 'brechós encontrados'}`;
-            cardsGrid.innerHTML = results.map(brecho => createCard(brecho)).join('');
-
-            // 5. MOSTRA OS CONTEÚDOS E ESCONDE O EMPTY STATE
-            emptyState.style.display = 'none';
-            resultsContent.style.display = 'block';
-
-            // Scroll suave para os resultados após a busca
-            setTimeout(() => {
-                mapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 200);
-        }
-
-        // Event listeners
-        document.getElementById('searchBtn').addEventListener('click', function() {
-            const query = document.getElementById('searchInput').value;
-            const results = searchBrechos(query);
-            displayResults(results);
-        });
-
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const query = this.value;
-                const results = searchBrechos(query);
-                displayResults(results);
-            }
-        });
-
-        // *******************************************************************
-        // * Inicia a interface automaticamente ao carregar
-        // *******************************************************************
+        
+        // Enter para buscar
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Inicializa o Leaflet Map E tenta encontrar a localização do usuário
-            initializeLeafletMap();
-            
-            // 2. Exibe todos os brechós na carga inicial, eliminando o estado vazio.
-            displayResults(brechos);
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') performSearch();
+            });
         });
     </script>
 </body>
 </html>
+
+
+
